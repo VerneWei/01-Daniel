@@ -18,3 +18,4 @@
   - ####     1897 年版是史密斯生前最后一版 -《但以理和启示录》版本 - 来源：
   - 电子书 (在线)- https://beta.egwwritings.org/read?paraId=p12861.1&id=p12861.1&index=0
   - 纸质书 (P D F)- https://sdapillars.org/media/download_gallery/US_DanRev1897.pdf
+## my facebook is Verne.wei.54
