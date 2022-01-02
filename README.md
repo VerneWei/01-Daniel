@@ -1,4 +1,18 @@
 # 01-Daniel，但以理书预言图解
+作者联系方式：my facebook is Verne.wei.54，微信13049391928
+## 简体版 、繁体版，English-Version | 但以理书预言图解-3.6版，2022年1月2日
+### 增加项：
+#### 1、修改了但以理的年龄，清楚的标明预言之灵和史密斯两个不同的算法
+#### 2、修改提庇留在位时间
+#### 3、修改但11:31和但11:35的经文对应时期。
+
+  - ####     1897 年版是史密斯生前最后一版 -《但以理和启示录》版本 - 来源：
+  - 电子书 (在线)- https://beta.egwwritings.org/read?paraId=p12861.1&id=p12861.1&index=0
+  - 纸质书 (P D F)- https://sdapillars.org/media/download_gallery/US_DanRev1897.pdf
+
+
+---
+
 ## 简体版 、繁体版，English-Version | 但以理书预言图解-3.5版，2021年11月2日
 ### 增加项：
 #### 1、修改了图表最后时间段南方王的
@@ -18,4 +32,4 @@
   - ####     1897 年版是史密斯生前最后一版 -《但以理和启示录》版本 - 来源：
   - 电子书 (在线)- https://beta.egwwritings.org/read?paraId=p12861.1&id=p12861.1&index=0
   - 纸质书 (P D F)- https://sdapillars.org/media/download_gallery/US_DanRev1897.pdf
-## my facebook is Verne.wei.54
+
