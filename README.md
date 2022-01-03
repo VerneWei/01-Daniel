@@ -10,6 +10,7 @@
 ### 点击连接下载：
 <a href="https://github.com/VerneWei/01-Daniel/raw/main/-2022.1.2-1-%E4%B8%AD(%E7%AE%80%E4%BD%93)%26%E8%8B%B1%E6%96%87%EF%BC%8C3.6%E7%89%88%EF%BC%8C%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3.pdf" >1-中(简体)&英文，3.6版，但以理书预言图解.pdf</a>
 
+
 <a href="https://github.com/VerneWei/01-Daniel/raw/main/-2022.1.2-2-%E4%B8%AD(%E7%B9%81%E4%BD%93)%26%E8%8B%B1%E6%96%87%EF%BC%8C3.6%E7%89%88%EF%BC%8C%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3.pdf" >2-中(繁体)&英文，3.6版，但以理书预言图解.pdf</a>
 
 <a href="https://github.com/VerneWei/01-Daniel/raw/main/-2022.1.2-3-%E4%B8%AD(%E7%AE%80%E4%BD%93)%EF%BC%8C3.6%E7%89%88%EF%BC%8C%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3.pdf" >3-中(简体)，3.6版，但以理书预言图解.pdf</a>
