@@ -2,7 +2,19 @@
 # 请下载最新版本2022.2.17,但以理书预言图解-3.7版
 **简体 、繁体，English-Version**
 
+<a href="https://github.com/VerneWei/01-Daniel/raw/main/-2022.2.17-1(%E7%AE%80%E4%BD%93)%EF%BC%8C3.7%E7%89%88%EF%BC%8C%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3.pdf">
+点此下载-(简体)，3.7版，但以理书预言图解.pdf
+</a>
 
+<a href="https://github.com/VerneWei/01-Daniel/raw/main/-2022.2.17-2(%E7%B9%81%E9%AB%94)%EF%BC%8C3.7%E7%89%88%EF%BC%8C%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3.pdf">
+点此下载-(繁體)，3.7版，但以理书预言图解.pdf
+</a>
+
+
+
+<a href="https://github.com/VerneWei/01-Daniel/raw/main/-2022.2.17-3-English%EF%BC%8CEdition%203.7%EF%BC%8CDaniel's%20Prophecy%20illustration.pdf">
+Click here to download — English，Edition 3.7，Daniel's Prophecy illustration.pdf
+</a>
 
 ### 作者联系方式：my facebook is Verne.wei.54，电话&微信13049391928
 <br>
