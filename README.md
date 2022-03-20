@@ -12,6 +12,8 @@
 > #### 2、更正英文版的一些错误
 <br>
 
+![image](https://github.com/VerneWei/01-Daniel/blob/main/%E4%BD%86%E4%BB%A5%E7%90%86%E5%9B%BE%E8%A7%A3%EF%BC%8C3.7-%E5%9B%BE.jpg)
+
 
 > ## 1897 年版是史密斯生前最后一版 -《但以理和启示录》版本 - 来源：
 > #### 电子书 (在线)- https://beta.egwwritings.org/read?paraId=p12861.1&id=p12861.1&index=0
