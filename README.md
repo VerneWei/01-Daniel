@@ -1,4 +1,4 @@
-# 但以理书预言图解-最新版 3.7版
+# 但以理书预言图解-最新版 4.0 版
 # (The Illustration of the prophecy of Daniel)
 
 > ## 请下载最新版本2022.2.17,但以理书预言图解-3.7版，**简体 、繁体，English-Version**
