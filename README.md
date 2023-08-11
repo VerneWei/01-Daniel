@@ -1,7 +1,7 @@
 # 但以理书预言图解-最新版 4.0 版
 # (The Illustration of the prophecy of Daniel)
 
-> ## 请下载最新版本2022.2.17,但以理书预言图解-3.7版，**简体 、繁体，English-Version**
+> ## 请下载最新版本2022.2.17,但以理书预言图解-4.0版，**简体 、繁体，English-Version**
 > <a href="https://github.com/VerneWei/01-Daniel/blob/main/4.0-%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3%20-%20%E7%AE%80%E4%BD%93%E7%89%88%20-%20%E7%94%B5%E5%AD%90%E7%89%88%EF%BC%8C2023-7-21.jpg?raw=true">点此下载-(简体)，4.0版，但以理书预言图解.pdf</a> <br>
 > <a href="https://github.com/VerneWei/01-Daniel/blob/main/4.0-%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3%20-%20%E7%B9%81%E4%BD%93%E7%89%88%20-%20%E7%94%B5%E5%AD%90%E7%89%88.jpg?raw=true">点此下载-(繁體)，4.0版，但以理书预言图解.pdf</a> <br>
 <br>
