@@ -6,7 +6,10 @@
 <br>
 
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
-[但以理书预言·视频课程](https://www.youtube.com/playlist?list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y)<br>
+
+>[![但以理书预言·视频课程](https://i.ytimg.com/vi/5CZJmdGottg/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLBaqC31z7hiMcdTYybnCyzRdCL2fg)](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)<br>
+
+
 
 
 >但以理和启示录图解【其他】下载地址<br>
