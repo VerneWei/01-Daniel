@@ -7,21 +7,8 @@
 
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
 
+<iframe width="1280" height="720" src="https://www.youtube.com/embed/5CZJmdGottg?list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y" title="但以理书第01讲 · 课程介绍" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>视频页面</title>
-</head>
-<body>
-    <h1>欢迎观看视频</h1>
-    <video width="600" controls>
-        <source src="[视频文件路径.mp4](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)" type="video/mp4">
-        你的浏览器不支持播放视频。
-    </video>
-</body>
 </html>
 
 
@@ -37,7 +24,7 @@
 >但以理·课程图解 + 视频  + 音频，+  PPT，下载地址<br>
 ><a href="https://www.123pan.com/s/4l49-9Mt0h.html">点此浏览但以理图课程素材内容</a>
 
-
+![image](https://github.com/VerneWei/01-Daniel/blob/main/4.3%E7%94%B5%E5%AD%90%E5%85%8D%E8%B4%B9%E7%89%88-%E4%BD%86%E4%BB%A5%E7%90%86%E5%9B%BE%E8%A7%A3-%E7%AE%80%E4%BD%93-2025%E5%B9%B41%E6%9C%8815%E6%97%A5.jpg?raw=true) <br>
 
 > ## 4.3增加项：
 > #### 1、更换AI图片素材
@@ -47,17 +34,17 @@
 > #### 5、添加了南方王和北方王的细节
 > #### 5、添加图解的版权信息： <br>
 > 但以理预言图解 <br>
-- 4.3 -免费电子版·图片素材 <br>
-在这个但以理图解中所使用的图片素材 <br>
-都是由魏茂盛使用AI制作 <br>
-仅限非商业的个人学习使用 <br>
+> - 4.3 -免费电子版·图片素材 <br>
+> 在这个但以理图解中所使用的图片素材 <br>
+> 都是由魏茂盛使用AI制作 <br>
+> 仅限非商业的个人学习使用 <br>
 
-本人授予所有人不出于商业目的免费分享和传播但以理预言图解-免费电子版的权利， <br>
-但任何人都不能将但以理预言图解-免费电子版印刷为纸质图解进行商业获利， <br>
-或私自印刷纸质的但以理预言图解-免费电子版。 <br>
-© 2025 魏茂盛。保留所有权利。 <br>
+> 本人授予所有人不出于商业目的免费分享和传播但以理预言图解-免费电子版的权利， <br>
+> 但任何人都不能将但以理预言图解-免费电子版印刷为纸质图解进行商业获利， <br>
+> 或私自印刷纸质的但以理预言图解-免费电子版。 <br>
+> © 2025 魏茂盛。保留所有权利。 <br>
 
-![image](https://github.com/VerneWei/01-Daniel/blob/main/4.3%E7%94%B5%E5%AD%90%E5%85%8D%E8%B4%B9%E7%89%88-%E4%BD%86%E4%BB%A5%E7%90%86%E5%9B%BE%E8%A7%A3-%E7%AE%80%E4%BD%93-2025%E5%B9%B41%E6%9C%8815%E6%97%A5.jpg?raw=true) <br>
+
 
 
 ---
