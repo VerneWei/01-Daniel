@@ -7,9 +7,9 @@
 
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
 
-<video src="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1" controls="controls" width="500" height="300">您的浏览器不支持播放该视频！</video>
+https://www.youtube.com/playlist?list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y
 
-
+[![但以理的系列课程15讲](https://i.ytimg.com/an_webp/5CZJmdGottg/mqdefault_6s.webp?du=3000&sqp=CNDNnrwG&rs=AOn4CLBC2fM1nClShRCRQ-FAhhRxZ3UeyA)](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)
 
 
 
