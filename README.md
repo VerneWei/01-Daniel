@@ -8,11 +8,24 @@
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
 
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频页面</title>
+</head>
+<body>
+    <h1>欢迎观看视频</h1>
+    <video width="600" controls>
+        <source src="[视频文件路径.mp4](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)" type="video/mp4">
+        你的浏览器不支持播放视频。
+    </video>
+</body>
+</html>
 
 
-<video controls>
-  <source src="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1" type="video/mp4">
-</video>
+
 
 
 
