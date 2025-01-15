@@ -10,6 +10,11 @@
 >[![但以理书预言·视频课程](https://i.ytimg.com/vi/5CZJmdGottg/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLBaqC31z7hiMcdTYybnCyzRdCL2fg)](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)<br>
 
 
+<video controls>
+  <source src="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1" type="video/mp4">
+但以理书第01讲 · 课程介绍
+</video>
+
 
 
 >但以理和启示录图解【其他】下载地址<br>
