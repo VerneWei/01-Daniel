@@ -7,9 +7,7 @@
 
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
 
-<iframe width="1280" height="720" src="https://www.youtube.com/embed/5CZJmdGottg?list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y" title="但以理书第01讲 · 课程介绍" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-</html>
+<video src="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1" controls="controls" width="500" height="300">您的浏览器不支持播放该视频！</video>
 
 
 
