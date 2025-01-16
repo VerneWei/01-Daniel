@@ -7,7 +7,8 @@
 
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
 
-点击以下图片查看但以理的系列课程15讲
+><a href="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y">点此浏览但以理图课程素材内容</a><br>
+点此浏览但以理的系列课程【共15讲】
 
 [![点击查看但以理的系列课程15讲](https://i.ytimg.com/vi/5CZJmdGottg/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCdj16UTeEjot8IzlRPVz6GJd5kuA)](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)  <br>
 
