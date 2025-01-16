@@ -7,20 +7,20 @@
 
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
 
-><a href="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y">点此浏览但以理图课程素材内容</a><br>
-点此浏览但以理的系列课程【共15讲】
+> ### <a href="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y">点此浏览但以理的系列课程【共15讲】</a><br>
+
 
 [![点击查看但以理的系列课程15讲](https://i.ytimg.com/vi/5CZJmdGottg/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCdj16UTeEjot8IzlRPVz6GJd5kuA)](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)  <br>
 
 
 
->但以理和启示录图解【其他】下载地址<br>
+> ### 但以理和启示录图解【其他】下载地址<br>
 
 ><a href="https://www.123pan.com/s/4l49-scb0h.htm">点此下载-(简体)，但以理和启示录图解.pdf</a>
 >https://www.123pan.com/s/4l49-scb0h.html<br>
 
->但以理·课程图解 + 视频  + 音频，+  PPT，下载地址<br>
-><a href="https://www.123pan.com/s/4l49-9Mt0h.html">点此浏览但以理图课程素材内容</a>
+> ### 但以理·课程图解 + 视频  + 音频，+  PPT，下载地址<br>
+> ### <a href="https://www.123pan.com/s/4l49-9Mt0h.html">点此浏览但以理图课程素材内容</a>
 
 ![image](https://github.com/VerneWei/01-Daniel/blob/main/4.3-%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3%20-%20%E7%AE%80%E4%BD%93%E7%89%88%20-%20%E7%94%B5%E5%AD%90%E7%89%88%EF%BC%8C2025-1-16.jpg?raw=true) <br>
 
