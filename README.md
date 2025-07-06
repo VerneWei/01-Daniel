@@ -12,7 +12,12 @@
 
 [![点击查看但以理的系列课程15讲](https://i.ytimg.com/vi/5CZJmdGottg/hqdefault.jpg?sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCdj16UTeEjot8IzlRPVz6GJd5kuA)](https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y&index=1)  <br>
 
+<br>
 
+##  <a href="https://www.youtube.com/watch?v=aPByd-Kuvxo&list=PLYL1obvmroFGvDZQMT6pxMEPieoPIzi4E">点击👇以下图片观看启示录视频 【正在制作中】</a><br> 
+[![启示录](https://i.ytimg.com/vi/aPByd-Kuvxo/hqdefault.jpg)](https://www.youtube.com/watch?v=aPByd-Kuvxo&list=PLYL1obvmroFGvDZQMT6pxMEPieoPIzi4E "点击播放")
+
+<br>
 
 > ### 但以理和启示录图解【其他】下载地址<br>
 
