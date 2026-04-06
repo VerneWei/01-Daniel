@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多维历史推演手卷 - 神圣预言典藏版(纯离线版)</title>
+  
+  <script src="./这是程序文件不要删除或者修改名字/react.production.min.js"></script>
+  <script src="./这是程序文件不要删除或者修改名字/react-dom.production.min.js"></script>
+  <script src="./这是程序文件不要删除或者修改名字/babel.min.js"></script>
+  <script src="./这是程序文件不要删除或者修改名字/tailwindcss.js"></script>
+
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useRef, useCallback, useEffect } = React;
+
+    // === 多语言翻译引擎 (i18n Dictionary) ===
+    const translations = {
+      zh: {
+        appTitle: "📜 2300日查询工具",
+        viewYear: "年视图", viewMonth: "月视图", viewDay: "日视图", span: "跨度", yearLabel: "年",
+        clickToEdit: "点击格子编辑备注", clickToDrill: "点击色块/线段可下钻至该年日视图",
+        quickNav: "快捷穿梭：", startPoint: "2300和七十个七的起点", crucify: "基督受难", end1844: "2300终点1844年", endPoint: "终点", flip: "翻阅", placeholderYear: "年份",
+        jewishEra: "犹太历纪元", chineseDynasty: "中国历史时期", dynastySpan: "对应中国朝代", prophecyProgress: "预言推演进度",
+        monthOverview: "全年概览", monthCount: "含 {n} 个历法月份", stageOverview: "历史阶段", stageCount: "包含 {n} 个考证跨度",
+        noRecord: "此时段无记录", etcRecords: "等 {n} 项记录...",
+        editModalTitle: "✏️ 编辑日推演记录", evtTitle: "事件标题 *", evtDesc: "详细描述", evtSource: "来源/文献名称", evtType: "标签类型", evtUrl: "权威文献链接 URL",
+        btnDelete: "删除记录", btnCancel: "取消", btnSave: "保存",
+        typeNote: "个人备注 (紫)", typeCrucial: "核心受难/审判 (红)", typeStart: "预言起点 (黄)", typeMile: "一般历史 (蓝)",
+        extendTitle: "⏳ 调整时间轴范围", extendPast: "起点控制 (过去/BC)", extendFuture: "终点控制 (未来/AD)",
+        extAddPast: "向更早扩展 (增加年份)：", extDelPast: "从起点删除 (缩减范围)：", extAddFuture: "向未来扩展 (增加年份)：", extDelFuture: "从终点删除 (缩减范围)：",
+        btnExtend: "扩 展", btnShrink: "删 除", resetDefault: "↺ 恢复至默认范围 (457BC - 2031AD)",
+        errLockPast: "❌ 错误：\n核心纪元受到保护。\n起点不能晚于 457 BC，且不能超过终点！",
+        errLockFuture: "❌ 错误：\n核心纪元受到保护。\n终点不能早于 1845 AD，且不能小于起点！",
+        colorTitle: "🎨 视觉与色彩定制引擎", resetColors: "↺ 恢复默认配置", opacity: "透明", borderWidth: "边框粗细", bgImage: "背景图片 (URL)",
+        dynasties: { xia: "夏朝/史前", shang: "商朝", zhou: "周朝 (西周/春秋/战国)", qin: "秦朝", han: "汉朝 (西/东汉)", sg: "三国时期", jin: "晋朝", nbc: "南北朝", sui: "隋朝", tang: "唐朝", wd: "五代十国", song: "宋朝 (北/南宋)", yuan: "元朝", ming: "明朝", qing: "清朝", modern: "现代中国" },
+        weekdays: ["日", "一", "二", "三", "四", "五", "六"], leap: "闰月", relMonth: "宗", civMonth: "民", monthLabel: "月", weekPre: "周",
+        months: ["尼散月", "以珥月", "西弯月", "搭模斯月", "埃波月", "以禄月", "提斯利月", "玛西班月", "基斯流月", "提别月", "细罢特月", "闰亚达月 I", "闰亚达月 II", "亚达月"],
+        p2300: "【2300日-{n}】", p70: "【70个7-{n}】", p7: "【7个7-{n}】", p62: "【62个7-{n}】", p1: "【1个7-{n}】",
+        confirmDeletePast: "⚠️ 确定删除 {y} 年吗？\n\n新的时间轴起点将变为【{year}】。",
+        confirmDeleteFuture: "⚠️ 确定删除 {y} 年吗？\n\n新的时间轴终点将变为【{year}】。",
+        confirmExtendPast: "✅ 成功向过去扩展了 {y} 年！\n\n当前时间轴已延伸至【{year}】。",
+        confirmExtendFuture: "✅ 成功向未来扩展了 {y} 年！\n\n当前时间轴已延伸至【{year}】。",
+        btnConfirm: "确定", btnOK: "好的",
+        noteJewishCalendar: "制作者注：犹太历只是作为一个参考，因为许多犹太历彼此之间是不一致的，这些犹太历与真实的历史事件有几天的时间误差。【有任何问题请联系微信13049391928；邮箱francalhenhenhahei@gmail.com】",
+        courseLinkForeign: "【国外请·点此浏览预言课程】",
+        courseLinkDomestic: "【国外内请·点此浏览下载预言课程资料】"
+      },
+      "zh-TW": {
+        appTitle: "📜 2300日查詢工具",
+        viewYear: "年視圖", viewMonth: "月視圖", viewDay: "日視圖", span: "跨度", yearLabel: "年",
+        clickToEdit: "點擊格子編輯備註", clickToDrill: "點擊色塊/線段可下鑽至該年日視圖",
+        quickNav: "快捷穿梭：", startPoint: "2300和七十個七的起點", crucify: "基督受難", end1844: "2300終點1844年", endPoint: "終點", flip: "翻閱", placeholderYear: "年份",
+        jewishEra: "猶太曆紀元", chineseDynasty: "中國歷史時期", dynastySpan: "對應中國朝代", prophecyProgress: "預言推演進度",
+        monthOverview: "全年概覽", monthCount: "含 {n} 個曆法月份", stageOverview: "歷史階段", stageCount: "包含 {n} 個考證跨度",
+        noRecord: "此時段無記錄", etcRecords: "等 {n} 項記錄...",
+        editModalTitle: "✏️ 編輯日推演記錄", evtTitle: "事件標題 *", evtDesc: "詳細描述", evtSource: "來源/文獻名稱", evtType: "標籤類型", evtUrl: "權威文獻連結 URL",
+        btnDelete: "刪除記錄", btnCancel: "取消", btnSave: "保存",
+        typeNote: "個人備註 (紫)", typeCrucial: "核心受難/審判 (紅)", typeStart: "預言起點 (黃)", typeMile: "一般歷史 (藍)",
+        extendTitle: "⏳ 調整時間軸範圍", extendPast: "起點控制 (過去/BC)", extendFuture: "終點控制 (未來/AD)",
+        extAddPast: "向更早擴展 (增加年份)：", extDelPast: "從起點刪除 (縮減範圍)：", extAddFuture: "向未來擴展 (增加年份)：", extDelFuture: "從終點刪除 (縮減範圍)：",
+        btnExtend: "擴 展", btnShrink: "刪 除", resetDefault: "↺ 恢復至默認範圍 (457BC - 2031AD)",
+        errLockPast: "❌ 錯誤：\n核心紀元受到保護。\n起點不能晚於 457 BC，且不能超過終點！",
+        errLockFuture: "❌ 錯誤：\n核心紀元受到保護。\n終點不能早於 1845 AD，且不能小於起點！",
+        colorTitle: "🎨 視覺與色彩定製引擎", resetColors: "↺ 恢復默認配置", opacity: "透明", borderWidth: "邊框粗細", bgImage: "背景圖片 (URL)",
+        dynasties: { xia: "夏朝/史前", shang: "商朝", zhou: "周朝 (西周/春秋/戰國)", qin: "秦朝", han: "漢朝 (西/東漢)", sg: "三國時期", jin: "晉朝", nbc: "南北朝", sui: "隋朝", tang: "唐朝", wd: "五代十國", song: "宋朝 (北/南宋)", yuan: "元朝", ming: "明朝", qing: "清朝", modern: "現代中國" },
+        weekdays: ["日", "一", "二", "三", "四", "五", "六"], leap: "閏月", relMonth: "宗", civMonth: "民", monthLabel: "月", weekPre: "週",
+        months: ["尼散月", "以珥月", "西彎月", "搭模斯月", "埃波月", "以祿月", "提斯利月", "瑪西班月", "基斯流月", "提別月", "細罷特月", "閏亞達月 I", "閏亞達月 II", "亞達月"],
+        p2300: "【2300日-{n}】", p70: "【70個7-{n}】", p7: "【7個7-{n}】", p62: "【62個7-{n}】", p1: "【1個7-{n}】",
+        confirmDeletePast: "⚠️ 確定刪除 {y} 年嗎？\n\n新的時間軸起點將變為【{year}】。",
+        confirmDeleteFuture: "⚠️ 確定刪除 {y} 年嗎？\n\n新的時間軸終點將變為【{year}】。",
+        confirmExtendPast: "✅ 成功向過去擴展了 {y} 年！\n\n當前時間軸已延伸至【{year}】。",
+        confirmExtendFuture: "✅ 成功向未來擴展了 {y} 年！\n\n當前時間軸已延伸至【{year}】。",
+        btnConfirm: "確定", btnOK: "好的",
+        noteJewishCalendar: "製作者注：猶太曆只是一個參考，因為許多猶太曆彼此之間是不一致的，這些猶太曆與真實的歷史事件有幾天的時間誤差。",
+        courseLinkForeign: "【國外請·點此瀏覽下載預言課程資料】",
+        courseLinkDomestic: "【國內請·點此瀏覽下載預言課程資料】"
+      },
+      ja: {
+        appTitle: "📜 2300日検索ツール",
+        viewYear: "年ビュー", viewMonth: "月ビュー", viewDay: "日ビュー", span: "期間", yearLabel: "年",
+        clickToEdit: "セルをクリックしてメモを編集", clickToDrill: "セグメントをクリックして年ビューに移動",
+        quickNav: "クイックナビ: ", startPoint: "2300と70週の起点", crucify: "キリストの受難", end1844: "2300の終点1844年", endPoint: "終点", flip: "移動", placeholderYear: "年",
+        jewishEra: "ユダヤ暦", chineseDynasty: "中国歴史区分", dynastySpan: "対応する中国王朝", prophecyProgress: "預言の進行度",
+        monthOverview: "年間概要", monthCount: "ユダヤ暦 {n} ヶ月", stageOverview: "歴史的段階", stageCount: "{n} 個の記録期間",
+        noRecord: "この期間の記録なし", etcRecords: "他 {n} 件の記録...",
+        editModalTitle: "✏️ 日次記録の編集", evtTitle: "イベントタイトル *", evtDesc: "詳細な説明", evtSource: "出典/参考文献", evtType: "タグの種類", evtUrl: "公式リンクURL",
+        btnDelete: "記録を削除", btnCancel: "キャンセル", btnSave: "保存",
+        typeNote: "個人メモ (紫)", typeCrucial: "核心受難/審判 (赤)", typeStart: "預言の起点 (黄)", typeMile: "一般歴史 (青)",
+        extendTitle: "⏳ タイムラインの範囲調整", extendPast: "起点制御 (過去/BC)", extendFuture: "終点制御 (未来/AD)",
+        extAddPast: "過去へ拡張 (年を追加):", extDelPast: "起点から縮小 (年を削除):", extAddFuture: "未来へ拡張 (年を追加):", extDelFuture: "終点から縮小 (年を削除):",
+        btnExtend: "拡 張", btnShrink: "縮 小", resetDefault: "↺ デフォルト範囲に戻す (457BC - 2031AD)",
+        errLockPast: "❌ エラー:\n核心時代は保護されています。\n起点は 457 BC より後、または終点を超えることはできません！",
+        errLockFuture: "❌ エラー:\n核心時代は保護されています。\n終点は 1845 AD より前、または起点より小さくすることはできません！",
+        colorTitle: "🎨 視覚と色彩のカスタマイズ", resetColors: "↺ デフォルト設定に戻す", opacity: "透明度", borderWidth: "境界線の太さ", bgImage: "背景画像 (URL)",
+        dynasties: { xia: "夏/先史", shang: "殷", zhou: "周", qin: "秦", han: "漢", sg: "三国時代", jin: "晋", nbc: "南北朝", sui: "隋", tang: "唐", wd: "五代十国", song: "宋", yuan: "元", ming: "明", qing: "清", modern: "現代中国" },
+        weekdays: ["日", "月", "火", "水", "木", "金", "土"], leap: "閏月", relMonth: "宗", civMonth: "民", monthLabel: "月", weekPre: "",
+        months: ["ニサン", "イヤル", "シワン", "タムズ", "アブ", "エルル", "ティシュレイ", "ヘシュヴァン", "キスレヴ", "テベット", "シェバット", "アダル I", "アダル II", "アダル"],
+        p2300: "[2300日-{n}]", p70: "[70週-{n}]", p7: "[7週-{n}]", p62: "[62週-{n}]", p1: "[1週-{n}]",
+        confirmDeletePast: "⚠️ {y} 年を削除してもよろしいですか？\n\n新しいタイムラインの起点は【{year}】になります。",
+        confirmDeleteFuture: "⚠️ {y} 年を削除してもよろしいですか？\n\n新しいタイムラインの終点は【{year}】になります。",
+        confirmExtendPast: "✅ 過去へ {y} 年拡張しました！\n\n現在のタイムラインは【{year}】まで延長されました。",
+        confirmExtendFuture: "✅ 未来へ {y} 年拡張しました！\n\n現在のタイムラインは【{year}】まで延長されました。",
+        btnConfirm: "確認", btnOK: "OK",
+        noteJewishCalendar: "作成者注：ユダヤ暦はあくまで参考です。多くのユダヤ暦は互いに一致しておらず、実際の歴史的事件とは数日の誤差があります。",
+        courseLinkForeign: "【海外：預言コース資料の閲覧・ダウンロード】",
+        courseLinkDomestic: "【国内：預言コース資料の閲覧・ダウンロード】"
+      },
+      ko: {
+        appTitle: "📜 2300일 조회 도구",
+        viewYear: "연도 뷰", viewMonth: "월 뷰", viewDay: "일 뷰", span: "범위", yearLabel: "년",
+        clickToEdit: "메모를 편집하려면 셀을 클릭하세요", clickToDrill: "해당 연도 일일 뷰로 이동하려면 세그먼트를 클릭하세요",
+        quickNav: "빠른 이동: ", startPoint: "2300 및 70이레의 시작", crucify: "그리스도의 수난", end1844: "2300 끝 1844년", endPoint: "종료", flip: "이동", placeholderYear: "연도",
+        jewishEra: "유대력 기원", chineseDynasty: "중국 역사 시대", dynastySpan: "해당 중국 왕조", prophecyProgress: "예언 진행 상황",
+        monthOverview: "연간 개요", monthCount: "히브리 달 {n}개 포함", stageOverview: "역사적 단계", stageCount: "기록 범위 {n}개 포함",
+        noRecord: "이 기간에 기록이 없습니다", etcRecords: "외 {n}개 기록...",
+        editModalTitle: "✏️ 일일 기록 편집", evtTitle: "이벤트 제목 *", evtDesc: "상세 설명", evtSource: "출처/참고", evtType: "태그 유형", evtUrl: "공식 링크 URL",
+        btnDelete: "기록 삭제", btnCancel: "취소", btnSave: "저장",
+        typeNote: "개인 메모 (보라)", typeCrucial: "핵심 수난/심판 (빨강)", typeStart: "예언 시작 (노랑)", typeMile: "일반 역사 (파랑)",
+        extendTitle: "⏳ 타임라인 범위 조정", extendPast: "시작 제어 (과거/BC)", extendFuture: "종료 제어 (미래/AD)",
+        extAddPast: "과거로 확장 (연도 추가):", extDelPast: "시작부터 축소 (연도 삭제):", extAddFuture: "미래로 확장 (연도 추가):", extDelFuture: "종료부터 축소 (연도 삭제):",
+        btnExtend: "확 장", btnShrink: "축 소", resetDefault: "↺ 기본 범위로 복원 (457BC - 2031AD)",
+        errLockPast: "❌ 오류:\n핵심 시대는 보호됩니다.\n시작 연도는 457 BC 이후이거나 종료 연도를 초과할 수 없습니다!",
+        errLockFuture: "❌ 오류:\n핵심 시대는 보호됩니다.\n종료 연도는 1845 AD 이전이거나 시작 연도보다 작 수 없습니다!",
+        colorTitle: "🎨 시각 및 색상 사용자 정의", resetColors: "↺ 기본 설정 복원", opacity: "투명도", borderWidth: "테두리 굵기", bgImage: "배경 이미지 (URL)",
+        dynasties: { xia: "하/선사", shang: "상", zhou: "주", qin: "진", han: "한", sg: "삼국", jin: "진(晉)", nbc: "남북조", sui: "수", tang: "당", wd: "오대십국", song: "송", yuan: "원", ming: "명", qing: "청", modern: "현대 중국" },
+        weekdays: ["일", "월", "화", "수", "목", "금", "토"], leap: "윤달", relMonth: "종", civMonth: "민", monthLabel: "월", weekPre: "",
+        months: ["니산월", "이야르월", "시완월", "담무스월", "압월", "엘룰월", "티스리월", "헤스반월", "기슬르월", "데벳월", "스밧월", "아달월 I", "아달월 II", "아달월"],
+        p2300: "[2300일-{n}]", p70: "[70이레-{n}]", p7: "[7이레-{n}]", p62: "[62이레-{n}]", p1: "[1이레-{n}]",
+        confirmDeletePast: "⚠️ {y}년을 삭제하시겠습니까?\n\n새로운 타임라인 시작점은 【{year}】이(가) 됩니다.",
+        confirmDeleteFuture: "⚠️ {y}년을 삭제하시겠습니까?\n\n새로운 타임라인 종료점은 【{year}】이(가) 됩니다.",
+        confirmExtendPast: "✅ 과거로 {y}년 확장되었습니다!\n\n현재 타임라인이 【{year}】(으)로 연장되었습니다.",
+        confirmExtendFuture: "✅ 미래로 {y}년 확장되었습니다!\n\n현재 타임라인이 【{year}】(으)로 연장되었습니다.",
+        btnConfirm: "확인", btnOK: "확인",
+        noteJewishCalendar: "제작자 주: 유대력은 참고용입니다. 많은 유대력이 서로 일치하지 않으며 실제 역사적 사건과 며칠의 오차가 있습니다.",
+        courseLinkForeign: "[해외: 예언 과정 자료 보기/다운로드]",
+        courseLinkDomestic: "[국내: 예언 과정 자료 보기/다운로드]"
+      },
+      en: {
+        appTitle: "📜 2300-Day Query Tool",
+        viewYear: "Year", viewMonth: "Month", viewDay: "Day", span: "Span", yearLabel: "yrs",
+        clickToEdit: "Click cell to edit notes", clickToDrill: "Click segment to drill down",
+        quickNav: "Quick Nav: ", startPoint: "Start of 2300", crucify: "Christ's Crucifixion", end1844: "1844 End of 2300", endPoint: "End", flip: "Go", placeholderYear: "Year",
+        jewishEra: "Jewish Era", chineseDynasty: "Chinese Dynasty", dynastySpan: "Dynasty Span", prophecyProgress: "Prophetic Progress",
+        monthOverview: "Yearly Overview", monthCount: "{n} Hebrew Months", stageOverview: "Historical Stage", stageCount: "{n} Record Spans",
+        noRecord: "No records in this period", etcRecords: "and {n} more records...",
+        editModalTitle: "✏️ Edit Daily Record", evtTitle: "Event Title *", evtDesc: "Detailed Description", evtSource: "Source / Reference", evtType: "Tag Type", evtUrl: "Authoritative Link URL",
+        btnDelete: "Delete", btnCancel: "Cancel", btnSave: "Save",
+        typeNote: "Personal Note (Purple)", typeCrucial: "Crucial/Judgment (Red)", typeStart: "Prophecy Start (Yellow)", typeMile: "Milestone (Blue)",
+        extendTitle: "⏳ Adjust Timeline Range", extendPast: "Start Bound (Past/BC)", extendFuture: "End Bound (Future/AD)",
+        extAddPast: "Extend into the past (Add years):", extDelPast: "Shrink from the start (Remove years):", extAddFuture: "Extend into the future (Add years):", extDelFuture: "Shrink from the end (Remove years):",
+        btnExtend: "Extend", btnShrink: "Shrink", resetDefault: "↺ Reset to Default (457BC - 2031AD)",
+        errLockPast: "❌ Error:\nCore era is protected.\nStart year cannot be later than 457 BC or exceed end year!",
+        errLockFuture: "❌ Error:\nCore era is protected.\nEnd year cannot be earlier than 1845 AD or preceding start year!",
+        colorTitle: "🎨 Visual & Color Customization", resetColors: "↺ Reset Default", opacity: "Alpha", borderWidth: "Border Width", bgImage: "BG Image (URL)",
+        dynasties: { xia: "Xia/Prehistoric", shang: "Shang", zhou: "Zhou", qin: "Qin", han: "Han", sg: "Three Kingdoms", jin: "Jin", nbc: "Southern & Northern", sui: "Sui", tang: "Tang", wd: "Five Dynasties", song: "Song", yuan: "Yuan", ming: "Ming", qing: "Qing", modern: "Modern China" },
+        weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], leap: "Leap", relMonth: "Rel", civMonth: "Civ", monthLabel: "", weekPre: "",
+        months: ["Nisan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Tevet", "Shevat", "Adar I", "Adar II", "Adar"],
+        p2300: "[2300 Days-{n}]", p70: "[70 Weeks-{n}]", p7: "[7 Weeks-{n}]", p62: "[62 Weeks-{n}]", p1: "[1 Week-{n}]",
+        confirmDeletePast: "⚠️ Are you sure you want to delete {y} years?\n\nThe new timeline start point will be [{year}].",
+        confirmDeleteFuture: "⚠️ Are you sure you want to delete {y} years?\n\nThe new timeline end point will be [{year}].",
+        confirmExtendPast: "✅ Successfully extended {y} years into the past!\n\nThe timeline now starts at [{year}].",
+        confirmExtendFuture: "✅ Successfully extended {y} years into the future!\n\nThe timeline now ends at [{year}].",
+        btnConfirm: "Confirm", btnOK: "OK",
+        noteJewishCalendar: "Author's Note: The Jewish calendar is for reference only, as various Jewish calendars are inconsistent, resulting in a few days of error compared to real historical events.",
+        courseLinkForeign: "[Foreign: Click here for Prophecy Course Materials]",
+        courseLinkDomestic: "[Domestic: Click here for Prophecy Course Materials]"
+      },
+      es: {
+        appTitle: "📜 Herramienta de consulta de 2300 días",
+        viewYear: "Año", viewMonth: "Mes", viewDay: "Día", span: "Lapso", yearLabel: "Años",
+        clickToEdit: "Clic celda para editar", clickToDrill: "Clic segmento para profundizar",
+        quickNav: "Atajos: ", startPoint: "Inicio 2300", crucify: "Crucifixión", end1844: "Fin de 2300 en 1844", endPoint: "Fin", flip: "Ir", placeholderYear: "Año",
+        jewishEra: "Era Judía", chineseDynasty: "Dinastía China", dynastySpan: "Lapso de Dinastía", prophecyProgress: "Progreso Profético",
+        monthOverview: "Visión Anual", monthCount: "{n} Meses Hebreos", stageOverview: "Etapa Histórica", stageCount: "{n} Tramos",
+        noRecord: "Sin registros en este periodo", etcRecords: "y {n} registros más...",
+        editModalTitle: "✏️ Editar Registro Diario", evtTitle: "Título del Evento *", evtDesc: "Descripción Detallada", evtSource: "Fuente", evtType: "Tipo de Etiqueta", evtUrl: "URL del Enlace",
+        btnDelete: "Borrar", btnCancel: "Cancelar", btnSave: "Guardar",
+        typeNote: "Nota Personal (Morado)", typeCrucial: "Crucial (Rojo)", typeStart: "Inicio Profecía (Amarillo)", typeMile: "Hito (Azul)",
+        extendTitle: "⏳ Ajustar Rango de Tiempo", extendPast: "Límite Inicial (Pasado/a.C.)", extendFuture: "Límite Final (Futuro/d.C.)",
+        extAddPast: "Extender al pasado (Añadir años):", extDelPast: "Reducir desde inicio (Quitar años):", extAddFuture: "Extender al futuro (Añadir años):", extDelFuture: "Reducir desde final (Quitar años):",
+        btnExtend: "Extender", btnShrink: "Reducir", resetDefault: "↺ Restablecer (457a.C. - 2031d.C.)",
+        errLockPast: "❌ Error:\nLa era central está protegida.\n¡El inicio no puede ser posterior al 457 a.C.!",
+        errLockFuture: "❌ Error:\nLa era central está protegida.\n¡El final no puede ser anterior al 1845 d.C.!",
+        colorTitle: "🎨 Configuración Visual", resetColors: "↺ Restablecer", opacity: "Opacidad", borderWidth: "Borde", bgImage: "Imagen de Fondo",
+        dynasties: { xia: "Xia/Prehistórico", shang: "Shang", zhou: "Zhou", qin: "Qin", han: "Han", sg: "Tres Reinos", jin: "Jin", nbc: "Sur y Norte", sui: "Sui", tang: "Tang", wd: "Cinco Dinastías", song: "Song", yuan: "Yuan", ming: "Ming", qing: "Qing", modern: "China Moderna" },
+        weekdays: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"], leap: "Bisiesto", relMonth: "Rel", civMonth: "Civ", monthLabel: "", weekPre: "",
+        months: ["Nisán", "Iyar", "Siván", "Tamuz", "Av", "Elul", "Tishrei", "Jeshván", "Kislev", "Tevet", "Shevat", "Adar I", "Adar II", "Adar"],
+        p2300: "[2300 Días-{n}]", p70: "[70 Semanas-{n}]", p7: "[7 Semanas-{n}]", p62: "[62 Semanas-{n}]", p1: "[1 Semana-{n}]",
+        confirmDeletePast: "⚠️ ¿Estás seguro de eliminar {y} años?\n\nEl nuevo punto de inicio será [{year}].",
+        confirmDeleteFuture: "⚠️ ¿Estás seguro de eliminar {y} años?\n\nEl nuevo punto final será [{year}].",
+        confirmExtendPast: "✅ ¡Se extendió con éxito {y} años hacia el pasado!\n\nLa línea de tiempo ahora comienza en [{year}].",
+        confirmExtendFuture: "✅ ¡Se extendió con éxito {y} años hacia el futuro!\n\nLa línea de tiempo ahora termina en [{year}].",
+        btnConfirm: "Confirmar", btnOK: "Aceptar",
+        noteJewishCalendar: "Nota del autor: El calendario judío es solo para referencia, ya que muchos calendarios judíos son inconsistentes, resultando en un margen de error de unos pocos días.",
+        courseLinkForeign: "[Extranjero: Materiales del Curso de Profecía]",
+        courseLinkDomestic: "[Nacional: Materiales del Curso de Profecía]"
+      },
+      fr: {
+        appTitle: "📜 Outil de recherche de 2300 jours",
+        viewYear: "Année", viewMonth: "Mois", viewDay: "Jour", span: "Durée", yearLabel: "Ans",
+        clickToEdit: "Cliquer pour éditer", clickToDrill: "Cliquer pour détailler l'année",
+        quickNav: "Accès: ", startPoint: "Début 2300", crucify: "Crucifixion", end1844: "Fin 1844", endPoint: "Fin", flip: "Aller", placeholderYear: "Année",
+        jewishEra: "Ère Juive", chineseDynasty: "Dynastie Chinoise", dynastySpan: "Période Chinoise", prophecyProgress: "Progrès Prophétique",
+        monthOverview: "Aperçu Annuel", monthCount: "{n} Mois Hébreux", stageOverview: "Étape Historique", stageCount: "{n} Périodes",
+        noRecord: "Aucun enregistrement", etcRecords: "et {n} de plus...",
+        editModalTitle: "✏️ Éditer l'enregistrement", evtTitle: "Titre *", evtDesc: "Description", evtSource: "Source", evtType: "Type", evtUrl: "Lien URL",
+        btnDelete: "Supprimer", btnCancel: "Annuler", btnSave: "Enregistrer",
+        typeNote: "Note (Violet)", typeCrucial: "Crucial (Rouge)", typeStart: "Début Prophétie (Jaune)", typeMile: "Jalon (Bleu)",
+        extendTitle: "⏳ Ajuster la chronologie", extendPast: "Début (Passé/Av. J.-C.)", extendFuture: "Fin (Futur/Ap. J.-C.)",
+        extAddPast: "Étendre (Ajouter ans):", extDelPast: "Réduire (Supprimer ans):", extAddFuture: "Étendre (Ajouter ans):", extDelFuture: "Réduire (Supprimer ans):",
+        btnExtend: "Étendre", btnShrink: "Réduire", resetDefault: "↺ Réinitialiser (457BC - 2031AD)",
+        errLockPast: "❌ Erreur:\nÈre centrale protégée.\nLe début ne peut être après 457 BC!",
+        errLockFuture: "❌ Erreur:\nÈre centrale protégée.\nLa fin ne peut être avant 1845 AD!",
+        colorTitle: "🎨 Configuration Visuelle", resetColors: "↺ Réinitialiser", opacity: "Opacité", borderWidth: "Bordure", bgImage: "Image de fond",
+        dynasties: { xia: "Xia/Préhistorique", shang: "Shang", zhou: "Zhou", qin: "Qin", han: "Han", sg: "Trois Royaumes", jin: "Jin", nbc: "Nord & Sud", sui: "Sui", tang: "Tang", wd: "Cinq Dynasties", song: "Song", yuan: "Yuan", ming: "Ming", qing: "Qing", modern: "Chine Moderne" },
+        weekdays: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"], leap: "Bissextile", relMonth: "Rel", civMonth: "Civ", monthLabel: "", weekPre: "",
+        months: ["Nissan", "Iyar", "Sivan", "Tammouz", "Av", "Éloul", "Tichri", "Hechvan", "Kislev", "Tévet", "Chevat", "Adar I", "Adar II", "Adar"],
+        p2300: "[2300 Jours-{n}]", p70: "[70 Semaines-{n}]", p7: "[7 Semaines-{n}]", p62: "[62 Semaines-{n}]", p1: "[1 Semaine-{n}]",
+        confirmDeletePast: "⚠️ Êtes-vous sûr de supprimer {y} ans ?\n\nLe nouveau point de départ sera [{year}].",
+        confirmDeleteFuture: "⚠️ Êtes-vous sûr de supprimer {y} ans ?\n\nLe nouveau point final sera [{year}].",
+        confirmExtendPast: "✅ Succès de l'extension de {y} ans dans le passé !\n\nLa chronologie commence maintenant à [{year}].",
+        confirmExtendFuture: "✅ Succès de l'extension de {y} ans dans le futur !\n\nLa chronologie se termine maintenant à [{year}].",
+        btnConfirm: "Confirmer", btnOK: "OK",
+        noteJewishCalendar: "Note de l'auteur : Le calendrier juif n'est qu'à titre de référence, car de nombreux calendriers juifs sont incohérents, entraînant une marge d'erreur de quelques jours.",
+        courseLinkForeign: "[Étranger: Matériel du cours de prophétie]",
+        courseLinkDomestic: "[National: Matériel du cours de prophétie]"
+      },
+      ru: {
+        appTitle: "📜 Инструмент поиска 2300 дней",
+        viewYear: "Год", viewMonth: "Месяц", viewDay: "День", span: "Охват", yearLabel: "Лет",
+        clickToEdit: "Клик для ред.", clickToDrill: "Клик для деталей",
+        quickNav: "Навигация: ", startPoint: "Начало 2300", crucify: "Распятие", end1844: "Конец 1844", endPoint: "Конец", flip: "Перейти", placeholderYear: "Год",
+        jewishEra: "Еврейская Эра", chineseDynasty: "Кит. Династия", dynastySpan: "Период Династий", prophecyProgress: "Пророческий прогресс",
+        monthOverview: "Обзор Го Года", monthCount: "{n} Евр. Месяцев", stageOverview: "Истор. Этап", stageCount: "{n} Периодов",
+        noRecord: "Нет записей", etcRecords: "и еще {n}...",
+        editModalTitle: "✏️ Редактировать запись", evtTitle: "Заголовок *", evtDesc: "Описание", evtSource: "Источник", evtType: "Тип", evtUrl: "Ссылка URL",
+        btnDelete: "Удалить", btnCancel: "Отмена", btnSave: "Сохранить",
+        typeNote: "Заметка (Фиолет.)", typeCrucial: "Важно (Красн.)", typeStart: "Начало Пророч. (Желт.)", typeMile: "Веха (Син.)",
+        extendTitle: "⏳ Настройка Диапазона", extendPast: "Начало (Прошлое/До н.э.)", extendFuture: "Конец (Будущее/Н.э.)",
+        extAddPast: "Расширить в прошлое (+):", extDelPast: "Сократить от начала (-):", extAddFuture: "Расширить в будущее (+):", extDelFuture: "Сократить с конца (-):",
+        btnExtend: "Расширить", btnShrink: "Сократить", resetDefault: "↺ Сброс (457BC - 2031AD)",
+        errLockPast: "❌ Ошибка:\nЦентральная эра защищена.\nНачало не может быть позже 457 BC!",
+        errLockFuture: "❌ Ошибка:\nЦентральная эра защищена.\nКонец не может быть раньше 1845 AD!",
+        colorTitle: "🎨 Настройка Оформления", resetColors: "↺ По умолч.", opacity: "Прозр.", borderWidth: "Толщина", bgImage: "Фон (URL)",
+        dynasties: { xia: "Ся/Доистор.", shang: "Шан", zhou: "Чжоу", qin: "Цинь", han: "Хань", sg: "Троецарствие", jin: "Цзинь", nbc: "Сев. и Юж.", sui: "Суй", tang: "Тан", wd: "Пять династий", song: "Сун", yuan: "Юань", ming: "Мин", qing: "Цин", modern: "Современный Китай" },
+        weekdays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"], leap: "Високос.", relMonth: "Рел", civMonth: "Граж", monthLabel: "", weekPre: "",
+        months: ["Нисан", "Ияр", "Сиван", "Таммуз", "Ав", "Элул", "Тишрей", "Хешван", "Кислев", "Тевет", "Шеват", "Адар I", "Адар II", "Адар"],
+        p2300: "[2300 Дней-{n}]", p70: "[70 Седмин-{n}]", p7: "[7 Седмин-{n}]", p62: "[62 Седмин-{n}]", p1: "[1 Седмина-{n}]",
+        confirmDeletePast: "⚠️ Вы уверены, что хотите удалить {y} лет?\n\nНовой начальной точкой станет [{year}].",
+        confirmDeleteFuture: "⚠️ Вы уверены, что хотите удалить {y} лет?\n\nНовой конечной точкой станет [{year}].",
+        confirmExtendPast: "✅ Успешно расширено на {y} лет в прошлое!\n\nТеперь временная шкала начинается с [{year}].",
+        confirmExtendFuture: "✅ Успешно расширено на {y} лет в будущее!\n\nТеперь временная шкала заканчивается на [{year}].",
+        btnConfirm: "Подтвердить", btnOK: "ОК",
+        noteJewishCalendar: "Примечание автора: Еврейский календарь служит лишь для справки, так как многие календари не совпадают, что дает погрешность в несколько дней.",
+        courseLinkForeign: "[За рубежом: Материалы курса пророчеств]",
+        courseLinkDomestic: "[Внутри страны: Материалы курса пророчеств]"
+      }
+    };
+
+    const hexToRgba = (hex, alpha) => {
+        if(!hex || !hex.startsWith('#')) return hex;
+        let r = parseInt(hex.slice(1, 3), 16);
+        let g = parseInt(hex.slice(3, 5), 16);
+        let b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha / 100})`;
+    };
+
+    const defaultHistoricalEvents = {
+      "-457-7-1": { title: "亚达薛西王出令", desc: "提斯利月（秋季）法令生效，恢复耶路撒冷自治，2300日预言开启。", source: "《以斯拉记》7:11-26", url: "https://www.biblegateway.com/passage/?search=Ezra+7%3A11-26&version=CUVS", type: "start" },
+      "31-1-14": { title: "逾越节：耶稣受难", desc: "一七之半。尼散月14日，逾越节羔羊被杀之日，耶稣被钉十字架。", source: "《但以理书》9:27", url: "https://www.biblegateway.com/passage/?search=Daniel+9%3A27&version=CUVS", type: "crucial" },
+      "1844-7-10": { title: "赎罪日 (2300日预言终点)", desc: "提斯利月初十（对应公历10月22日）。大祭司进入天上至圣所。", source: "《但以理书》8:14", url: "https://www.biblegateway.com/passage/?search=Daniel+8%3A14&version=CUVS", type: "crucial" },
+      "2031-7-10": { title: "未来预演节点 (示例)", desc: "您可以点击这里修改内容，或在其他任意一天添加您对未来的推演预判。", source: "自定义推演", url: "", type: "note" }
+    };
+
+    const VISIBLE_ROWS = 15;
+    const metonicOffsets = [8, 27, 16, 5, 24, 13, 2, 21, 10, 29, 18, 7, 26, 15, 4, 23, 12, 1, 20];
+    
+    // 【核心修复区域】：修正了1844年的公历起始日 typo，由 19:19 改为 day: 19
+    const historicalOverrides = { 1844: { month: 3, day: 19, note: "卡拉派历法起始日" } };
+
+    const initialTheme = {
+      bgApp: "#fdfaf3", bgHeader: "#f4ebd8", bgCard: "#fbf8f1", borderMain: "#e5d5b7",
+      textMain: "#292524", textSub: "#78716c",
+      crucialBg: "#fef2f2", crucialBorder: "#f87171", crucialText: "#991b1b",
+      startBg: "#fef3c7", startBorder: "#fbbf24", startText: "#b45309",
+      mileBg: "#f0f9ff", mileBorder: "#7dd3fc", mileText: "#0369a1",
+      noteBg: "#f5f3ff", noteBorder: "#c4b5fd", noteText: "#5b21b6",
+    };
+    const initialAlpha = {
+      bgApp: 100, bgHeader: 100, bgCard: 100, borderMain: 100, textMain: 100, textSub: 100,
+      crucialBg: 100, crucialBorder: 100, crucialText: 100, startBg: 100, startBorder: 100, startText: 100,
+      mileBg: 100, mileBorder: 100, mileText: 100, noteBg: 100, noteBorder: 100, noteText: 100
+    };
+
+    // === 核心预言推算数学引擎 (Fall-to-Fall 秋季精准跨年引擎) ===
+    const getProphecyN = (y, relMonth) => {
+        if (y < -457) return 0;
+        if (y === -457 && relMonth < 7) return 0;
+        let diff = y < 0 ? y - (-457) : y + 456;
+        return relMonth >= 7 ? diff + 1 : diff;
+    };
+
+    function JewishHistoricalEngine() {
+      const [lang, setLang] = useState('zh');
+      const t = translations[lang] || translations['zh'];
+
+      const getProphecyTags = useCallback((n) => {
+          const tags = [];
+          if (n >= 1 && n <= 2300) tags.push(t.p2300.replace('{n}', String(n).padStart(4, '0')));
+          if (n >= 1 && n <= 490) tags.push(t.p70.replace('{n}', String(n).padStart(2, '0')));
+          
+          if (n >= 1 && n <= 49) {
+              tags.push(t.p7.replace('{n}', String(n).padStart(2, '0')));
+          } else if (n >= 50 && n <= 483) {
+              tags.push(t.p62.replace('{n}', String(n - 49).padStart(3, '0')));
+          } else if (n >= 484 && n <= 490) {
+              tags.push(t.p1.replace('{n}', String(n - 483)));
+          }
+          return tags;
+      }, [t]);
+
+      const getDynasty = (y) => {
+          if (y < -1600) return t.dynasties.xia;
+          if (y >= -1600 && y < -1046) return t.dynasties.shang;
+          if (y >= -1046 && y < -221) return t.dynasties.zhou;
+          if (y >= -221 && y < -206) return t.dynasties.qin;
+          if (y >= -206 && y <= 220) return t.dynasties.han;
+          if (y > 220 && y <= 280) return t.dynasties.sg;
+          if (y > 280 && y <= 420) return t.dynasties.jin;
+          if (y > 420 && y <= 589) return t.dynasties.nbc;
+          if (y > 589 && y <= 618) return t.dynasties.sui;
+          if (y > 618 && y <= 907) return t.dynasties.tang;
+          if (y > 907 && y <= 960) return t.dynasties.wd;
+          if (y > 960 && y <= 1279) return t.dynasties.song;
+          if (y > 1279 && y <= 1368) return t.dynasties.yuan;
+          if (y > 1368 && y <= 1644) return t.dynasties.ming;
+          if (y > 1644 && y <= 1912) return t.dynasties.qing;
+          if (y > 1912) return t.dynasties.modern;
+          return "";
+      };
+
+      const containerRef = useRef(null);
+      const [scrollTop, setScrollTop] = useState(0);
+      const [dialog, setDialog] = useState({ isOpen: false, type: 'alert', message: '', onConfirm: null });
+
+      const [startYear, setStartYear] = useState(() => parseInt(localStorage.getItem('jewishEngineStart')) || -457);
+      const [endYear, setEndYear] = useState(() => parseInt(localStorage.getItem('jewishEngineEnd')) || 2031);
+      const [inputYear, setInputYear] = useState(startYear);
+
+      useEffect(() => {
+        localStorage.setItem('jewishEngineStart', startYear);
+        localStorage.setItem('jewishEngineEnd', endYear);
+      }, [startYear, endYear]);
+
+      const [themeHex, setThemeHex] = useState(initialTheme);
+      const [themeAlpha, setThemeAlpha] = useState(initialAlpha);
+      const [themeBorderWidth, setThemeBorderWidth] = useState(() => parseInt(localStorage.getItem('jewishBorderWidth')) || 1);
+      const [themeBgImage, setThemeBgImage] = useState(() => localStorage.getItem('jewishBgImage') || "");
+      const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+      useEffect(() => {
+        localStorage.setItem('jewishBorderWidth', themeBorderWidth);
+        localStorage.setItem('jewishBgImage', themeBgImage);
+      }, [themeBorderWidth, themeBgImage]);
+      
+      const theme = useMemo(() => {
+          const res = {};
+          for(let key in themeHex) {
+              res[key] = hexToRgba(themeHex[key], themeAlpha[key]);
+          }
+          return res;
+      }, [themeHex, themeAlpha]);
+
+      const [isExtendOpen, setIsExtendOpen] = useState(false);
+      const [customPastYears, setCustomPastYears] = useState(50);
+      const [customFutureYears, setCustomFutureYears] = useState(50);
+      
+      const [viewMode, setViewMode] = useState('day'); 
+      const [yearGroup, setYearGroup] = useState(1); 
+      const [pendingJumpYear, setPendingJumpYear] = useState(null);
+      
+      const [userEvents, setUserEvents] = useState(() => {
+        try {
+          const saved = localStorage.getItem('jewishEngineEvents');
+          return saved ? JSON.parse(saved) : defaultHistoricalEvents;
+        } catch (e) {
+          return defaultHistoricalEvents;
+        }
+      });
+
+      useEffect(() => {
+        localStorage.setItem('jewishEngineEvents', JSON.stringify(userEvents));
+      }, [userEvents]);
+      
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [activeDateInfo, setActiveDateInfo] = useState(null);
+      const [editForm, setEditForm] = useState({ title: '', desc: '', source: '', url: '', type: 'note' });
+
+      const formatYearStr = (y) => {
+          if (y === 0) return "1 AD";
+          return y < 0 ? `${Math.abs(y)} BC` : `${y} AD`;
+      };
+
+      const handleExtendPast = (years) => {
+          if (!years || years <= 0) return;
+          const newStart = startYear - years;
+          setStartYear(newStart);
+          setTimeout(() => jumpToYear(newStart), 100);
+      };
+
+      const handleShrinkPast = (years) => {
+          if (!years || years <= 0) return;
+          let newStart = startYear + years;
+          if (newStart > -457) {
+              setDialog({ isOpen: true, type: 'alert', message: t.errLockPast });
+              return;
+          }
+          if (newStart >= endYear) {
+              setDialog({ isOpen: true, type: 'alert', message: t.errLockPast });
+              return;
+          }
+          setDialog({
+             isOpen: true, type: 'confirm', 
+             message: t.confirmDeletePast.replace('{y}', years).replace('{year}', formatYearStr(newStart)),
+             onConfirm: () => setStartYear(newStart)
+          });
+      };
+
+      const handleExtendFuture = (years) => {
+          if (!years || years <= 0) return;
+          const newEnd = endYear + years;
+          setEndYear(newEnd);
+          setTimeout(() => jumpToYear(newEnd), 100);
+      };
+
+      const handleShrinkFuture = (years) => {
+          if (!years || years <= 0) return;
+          let newEnd = endYear - years;
+          if (newEnd < 1845) {
+              setDialog({ isOpen: true, type: 'alert', message: t.errLockFuture });
+              return;
+          }
+          if (newEnd <= startYear) {
+              setDialog({ isOpen: true, type: 'alert', message: t.errLockFuture });
+              return;
+          }
+          setDialog({
+             isOpen: true, type: 'confirm', 
+             message: t.confirmDeleteFuture.replace('{y}', years).replace('{year}', formatYearStr(newEnd)),
+             onConfirm: () => setEndYear(newEnd)
+          });
+      };
+
+      const handleResetTimeline = () => {
+          setDialog({
+             isOpen: true, type: 'confirm', 
+             message: "⚠️ " + t.resetDefault,
+             onConfirm: () => { setStartYear(-457); setEndYear(2031); }
+          });
+      };
+
+      const baseCalendarData = useMemo(() => {
+        let data = [];
+        for (let y = startYear; y <= endYear; y++) {
+          if (y === 0) continue; 
+          const jewishYear = y < 0 ? y + 3762 : y + 3760;
+          const cycleYear = jewishYear % 19;
+          const isLeapYear = [3, 6, 8, 11, 14, 17, 0].includes(cycleYear);
+          const yearStr = y < 0 ? `${Math.abs(y)} BC` : `${y} AD`;
+
+          let currentGDate = new Date();
+          currentGDate.setHours(0, 0, 0, 0);
+
+          if (historicalOverrides[y]) {
+            // 【重点修复】：之前因为 day 缺失，导致这里获取到的公历日期是 NaN (Invalid Date)
+            currentGDate.setFullYear(y, historicalOverrides[y].month, historicalOverrides[y].day);
+          } else {
+            currentGDate.setFullYear(y, 2, 21);
+            currentGDate.setDate(currentGDate.getDate() + metonicOffsets[cycleYear]);
+          }
+
+          const getMonthNameIndex = (idx, isLeap) => {
+            if(idx < 11) return idx;
+            if(isLeap && idx === 11) return 11;
+            if(isLeap && idx === 12) return 12;
+            return 13;
+          };
+
+          const months = [];
+          for(let i=0; i<11; i++){
+             months.push({ r: i+1, c: (i+6)%12+1, nameIndex: getMonthNameIndex(i, isLeapYear), days: [30,29,30,29,30,29,30,29,30,29,30][i] });
+          }
+          if (isLeapYear) {
+            months.push({ r: 12, c: 6, nameIndex: getMonthNameIndex(11, true), days: 30, isLeap: true });
+            months.push({ r: 13, c: "6+", nameIndex: getMonthNameIndex(12, true), days: 29, isLeap: true });
+          } else {
+            months.push({ r: 12, c: 6, nameIndex: getMonthNameIndex(11, false), days: 29 });
+          }
+
+          months.forEach((m, idx) => {
+            let daysData = [];
+            for (let d = 1; d <= m.days; d++) {
+              daysData.push({
+                year: y, relMonth: m.r, day: d, 
+                gregMonth: currentGDate.getMonth() + 1,
+                gregDay: currentGDate.getDate(),
+                dowIdx: currentGDate.getDay()
+              });
+              currentGDate.setDate(currentGDate.getDate() + 1);
+            }
+            data.push({
+              year: y, yearStr: idx === 0 ? yearStr : "",
+              jewishYearDisplay: idx === 0 ? jewishYear : "",
+              isFirstOfMonth: idx === 0,
+              baseDaysData: daysData,
+              ...m,
+            });
+          });
+        }
+        return data;
+      }, [startYear, endYear]);
+
+      const baseYearsData = useMemo(() => {
+        const yData = [];
+        let curYear = null;
+        baseCalendarData.forEach(month => {
+            if (!curYear || curYear.year !== month.year) {
+                if (curYear) yData.push(curYear);
+                curYear = { year: month.year, yearStr: month.yearStr || (month.year < 0 ? `${Math.abs(month.year)} BC` : `${month.year} AD`), jewishYearDisplay: month.jewishYearDisplay, months: [] };
+            }
+            curYear.months.push(month);
+        });
+        if (curYear) yData.push(curYear);
+        return yData;
+      }, [baseCalendarData]);
+
+      const yearGroupRows = useMemo(() => {
+        const chunks = [];
+        for (let i = 0; i < baseYearsData.length; i += yearGroup) {
+            const chunkYears = baseYearsData.slice(i, i + yearGroup);
+            chunks.push({
+                startYear: chunkYears[0].year, endYear: chunkYears[chunkYears.length - 1].year,
+                startYearStr: chunkYears[0].yearStr, endYearStr: chunkYears[chunkYears.length - 1].yearStr || (chunkYears[chunkYears.length - 1].year < 0 ? `${Math.abs(chunkYears[chunkYears.length - 1].year)} BC` : `${chunkYears[chunkYears.length - 1].year} AD`),
+                years: chunkYears
+            });
+        }
+        const rows = [];
+        for (let i = 0; i < chunks.length; i += 10) {
+            const rowChunks = chunks.slice(i, i + 10);
+            rows.push({
+                startYear: rowChunks[0].startYear, endYear: rowChunks[rowChunks.length - 1].endYear,
+                startYearStr: rowChunks[0].startYearStr, endYearStr: rowChunks[rowChunks.length - 1].endYearStr,
+                chunks: rowChunks
+            });
+        }
+        return rows;
+      }, [baseYearsData, yearGroup]);
+
+      const listToRender = useMemo(() => {
+          if (viewMode === 'day') return baseCalendarData.map((item, idx) => ({ ...item, absoluteIndex: idx }));
+          if (viewMode === 'month') return baseYearsData.map((item, idx) => ({ ...item, absoluteIndex: idx }));
+          return yearGroupRows.map((item, idx) => ({ ...item, absoluteIndex: idx }));
+      }, [viewMode, baseCalendarData, baseYearsData, yearGroupRows]);
+
+      // 调整了各级视图的行高，以容纳放大后的超大字体及新增的提示条高度
+      const rowHeight = viewMode === 'day' ? 250 : viewMode === 'month' ? 350 : 290;
+      const totalHeight = listToRender.length * rowHeight;
+      const handleScroll = (e) => window.requestAnimationFrame(() => setScrollTop(e.target.scrollTop));
+
+      const startIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - VISIBLE_ROWS);
+      const endIndex = Math.min(listToRender.length - 1, Math.floor((scrollTop + (containerRef.current?.clientHeight || 800)) / rowHeight) + VISIBLE_ROWS);
+
+      const visibleData = listToRender.slice(startIndex, endIndex + 1).map(baseItem => {
+          if (viewMode === 'day') {
+              let monthHasEvent = false;
+              const daysData = baseItem.baseDaysData.map(dInfo => {
+                  const ev = userEvents[`${dInfo.year}-${dInfo.relMonth}-${dInfo.day}`];
+                  if (ev) monthHasEvent = true;
+                  return { ...dInfo, event: ev };
+              });
+              return { ...baseItem, daysData, monthHasEvent };
+          } else if (viewMode === 'month') {
+              const monthsData = baseItem.months.map(m => {
+                  const mEvs = m.baseDaysData.map(d => userEvents[`${d.year}-${d.relMonth}-${d.day}`]).filter(Boolean);
+                  return { ...m, events: mEvs };
+              });
+              const allYearEvents = monthsData.flatMap(m => m.events);
+              return { ...baseItem, monthsData, hasEvent: allYearEvents.length > 0, allEvents: allYearEvents };
+          } else {
+              const chunksData = baseItem.chunks.map(chunk => {
+                  const chunkEvents = chunk.years.flatMap(y => y.months.flatMap(m => m.baseDaysData.map(d => userEvents[`${d.year}-${d.relMonth}-${d.day}`]).filter(Boolean)));
+                  return { ...chunk, events: chunkEvents };
+              });
+              const allRowEvents = chunksData.flatMap(c => c.events);
+              return { ...baseItem, chunksData, hasEvent: allRowEvents.length > 0, allEvents: allRowEvents };
+          }
+      });
+
+      const jumpToYear = useCallback((targetYear) => {
+        let y = parseInt(targetYear, 10);
+        if (isNaN(y) || y === 0) return;
+        if (y < startYear) y = startYear;
+        if (y > endYear) y = endYear;
+        const targetIdx = listToRender.findIndex(item => {
+            if (viewMode === 'day') return item.year === y;
+            if (viewMode === 'month') return item.year === y;
+            if (viewMode === 'year') return y >= item.startYear && y <= item.endYear;
+            return false;
+        });
+        if (targetIdx !== -1 && containerRef.current) { containerRef.current.scrollTop = targetIdx * rowHeight; setInputYear(y); }
+      }, [listToRender, viewMode, rowHeight, startYear, endYear]);
+
+      const handleZoomToYear = (y) => { 
+        if (viewMode === 'year') {
+            if (yearGroup === 500) setYearGroup(100);
+            else if (yearGroup === 100) setYearGroup(50);
+            else if (yearGroup === 50) setYearGroup(10);
+            else if (yearGroup === 10) setYearGroup(5);
+            else if (yearGroup === 5) setYearGroup(1);
+            else setViewMode('month'); // 1年跨度点击后，继续下钻进入月视图
+        } else if (viewMode === 'month') {
+            setViewMode('day'); // 月视图点击后，继续下钻进入日视图
+        } else {
+            setViewMode('day');
+        }
+        setPendingJumpYear(y); 
+      };
+      useEffect(() => { if (pendingJumpYear !== null) { jumpToYear(pendingJumpYear); setPendingJumpYear(null); } }, [listToRender, pendingJumpYear, jumpToYear]);
+      const handleManualInput = (e) => { e.preventDefault(); jumpToYear(inputYear); };
+
+      const openEditor = (dInfo) => {
+        setActiveDateInfo(dInfo);
+        if (dInfo.event) setEditForm(dInfo.event); else setEditForm({ title: '', desc: '', source: '', url: '', type: 'note' });
+        setIsModalOpen(true);
+      };
+
+      const saveEvent = () => {
+        if (!editForm.title.trim()) { setDialog({ isOpen: true, type: 'alert', message: "标题不能为空！" }); return; }
+        const eventKey = `${activeDateInfo.year}-${activeDateInfo.relMonth}-${activeDateInfo.day}`;
+        setUserEvents(prev => ({ ...prev, [eventKey]: { ...editForm } }));
+        setIsModalOpen(false);
+      };
+
+      const deleteEvent = () => {
+        const eventKey = `${activeDateInfo.year}-${activeDateInfo.relMonth}-${activeDateInfo.day}`;
+        setUserEvents(prev => { const newState = { ...prev }; delete newState[eventKey]; return newState; });
+        setIsModalOpen(false);
+      };
+
+      const bWidth = `${themeBorderWidth}px`;
+
+      function getEventStyle(event) {
+        if (!event) return { backgroundColor: "transparent", borderColor: theme.borderMain, borderWidth: bWidth };
+        if (event.type === 'crucial') return { backgroundColor: theme.crucialBg, borderColor: theme.crucialBorder, borderWidth: bWidth, color: theme.crucialText, zIndex: 10, transform: 'scale(1.08)' };
+        if (event.type === 'start') return { backgroundColor: theme.startBg, borderColor: theme.startBorder, borderWidth: bWidth, color: theme.startText, zIndex: 10, transform: 'scale(1.08)' };
+        if (event.type === 'note') return { backgroundColor: theme.noteBg, borderColor: theme.noteBorder, borderWidth: bWidth, color: theme.noteText, zIndex: 10, transform: 'scale(1.08)' };
+        return { backgroundColor: theme.mileBg, borderColor: theme.mileBorder, borderWidth: bWidth, color: theme.mileText, zIndex: 10, transform: 'scale(1.05)' };
+      }
+
+      function getHighestStyle(events) {
+        if (!events || events.length === 0) return { backgroundColor: "transparent", borderColor: theme.borderMain, borderWidth: bWidth, color: theme.textSub };
+        const priority = { crucial: 4, start: 3, milestone: 2, note: 1 };
+        const highestEvent = events.reduce((prev, current) => (priority[current.type] || 0) > (priority[prev.type] || 0) ? current : prev, events[0]);
+
+        if (highestEvent.type === 'crucial') return { backgroundColor: theme.crucialBg, borderColor: theme.crucialBorder, borderWidth: bWidth, color: theme.crucialText };
+        if (highestEvent.type === 'start') return { backgroundColor: theme.startBg, borderColor: theme.startBorder, borderWidth: bWidth, color: theme.startText };
+        if (highestEvent.type === 'note') return { backgroundColor: theme.noteBg, borderColor: theme.noteBorder, borderWidth: bWidth, color: theme.noteText };
+        return { backgroundColor: theme.mileBg, borderColor: theme.mileBorder, borderWidth: bWidth, color: theme.mileText };
+      }
+
+      const renderSidebarEvents = (events) => {
+          if (events.length === 0) return <div className="text-[10px] text-center italic font-serif" style={{ color: theme.textSub, opacity: 0.6 }}>{t.noRecord}</div>;
+          const displayEvents = events.slice(0, 4); 
+          return (
+              <div className="space-y-2">
+                  {displayEvents.map((ev, idx) => {
+                      const evtStyle = getHighestStyle([ev]);
+                      return (
+                          <div key={idx} className="pl-2.5 relative group" style={{ borderLeftWidth: Math.max(2, themeBorderWidth)+'px', borderLeftColor: evtStyle.borderColor, borderStyle: 'solid' }}>
+                              <div className="text-xs font-bold font-serif line-clamp-1 mb-0.5" style={{ color: evtStyle.color }}>{ev.title}</div>
+                              <div className="text-[10px] line-clamp-1 leading-tight" title={ev.desc} style={{ color: theme.textSub }}>{ev.desc}</div>
+                          </div>
+                      )
+                  })}
+                  {events.length > 4 && <div className="text-[9px] italic mt-1" style={{ color: theme.textSub }}>{t.etcRecords.replace('{n}', events.length)}</div>}
+              </div>
+          )
+      };
+
+      const bgStyles = {
+        backgroundColor: theme.bgApp, 
+        color: theme.textMain, 
+        backgroundImage: themeBgImage ? `url(${themeBgImage})` : 'none', 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center', 
+        backgroundAttachment: 'fixed', 
+        backgroundRepeat: 'no-repeat'
+      };
+
+      return (
+        <div className="flex flex-col h-screen font-sans overflow-x-auto overflow-y-hidden custom-scrollbar transition-colors duration-300 relative" style={bgStyles}>
+          {/* 【修复】全局水平防挤压包裹层，保证最小宽度，自然产生滚动条 */}
+          <div className="flex flex-col h-full min-w-max w-full">
+          
+          {/* === 全局自定义安全对话框 === */}
+          {dialog.isOpen && (
+             <div className="fixed inset-0 bg-black/50 z-[200] flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+                <div className="bg-[#fdfaf3] border border-[#e5d5b7] p-6 rounded-xl shadow-2xl w-full max-w-sm">
+                   <div className="font-bold text-stone-800 mb-6 whitespace-pre-wrap leading-relaxed">
+                       {dialog.message}
+                   </div>
+                   <div className="flex justify-end gap-3">
+                       {dialog.type === 'confirm' && (
+                           <button onClick={() => setDialog({ isOpen: false })} className="px-5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded transition-colors font-medium border border-[#e5d5b7]">
+                               {t.btnCancel}
+                           </button>
+                       )}
+                       <button onClick={() => { if (dialog.onConfirm) dialog.onConfirm(); setDialog({ isOpen: false }); }} className={`px-5 py-2 rounded transition-colors font-bold shadow text-white ${dialog.type === 'confirm' ? 'bg-amber-600 hover:bg-amber-700' : 'bg-blue-600 hover:bg-blue-700'}`}>
+                           {dialog.type === 'confirm' ? t.btnConfirm : t.btnOK}
+                       </button>
+                   </div>
+                </div>
+             </div>
+          )}
+
+          {/* === 模态框：编辑事件 === */}
+          {isModalOpen && activeDateInfo && (
+            <div className="fixed inset-0 bg-black/40 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+              <div className="bg-[#fdfaf3] border border-[#e5d5b7] p-6 rounded-xl shadow-2xl w-full max-w-md transform transition-all">
+                <div className="flex justify-between items-center mb-4 border-b pb-2 border-[#e5d5b7]">
+                  <h3 className="font-bold text-lg font-serif text-amber-900">{t.editModalTitle}</h3>
+                  <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-red-500 font-bold">✕</button>
+                </div>
+                <div className="text-xs mb-4 p-2 bg-amber-50 rounded border border-amber-200 text-amber-800 font-mono flex justify-between">
+                  <span>{t.jewishEra}: {activeDateInfo.year < 0 ? Math.abs(activeDateInfo.year)+' BC' : activeDateInfo.year+' AD'} - {t.relMonth}{activeDateInfo.relMonth}{t.monthLabel} {t.civMonth}{activeDateInfo.day}</span>
+                  <span>{activeDateInfo.gregMonth}/{activeDateInfo.gregDay} ({t.weekdays[activeDateInfo.dowIdx]})</span>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">{t.evtTitle}</label>
+                    <input type="text" value={editForm.title} onChange={e => setEditForm({...editForm, title: e.target.value})} className="w-full p-2 border border-[#d6c7ab] rounded bg-white text-sm outline-none focus:border-amber-500" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">{t.evtDesc}</label>
+                    <textarea value={editForm.desc} onChange={e => setEditForm({...editForm, desc: e.target.value})} className="w-full p-2 border border-[#d6c7ab] rounded bg-white text-sm outline-none focus:border-amber-500 h-20 resize-none" />
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="flex-1">
+                      <label className="block text-xs font-bold text-stone-700 mb-1">{t.evtSource}</label>
+                      <input type="text" value={editForm.source} onChange={e => setEditForm({...editForm, source: e.target.value})} className="w-full p-2 border border-[#d6c7ab] rounded bg-white text-sm outline-none focus:border-amber-500" />
+                    </div>
+                    <div className="w-1/3">
+                      <label className="block text-xs font-bold text-stone-700 mb-1">{t.evtType}</label>
+                      <select value={editForm.type} onChange={e => setEditForm({...editForm, type: e.target.value})} className="w-full p-2 border border-[#d6c7ab] rounded bg-white text-sm outline-none focus:border-amber-500">
+                        <option value="note">{t.typeNote}</option>
+                        <option value="crucial">{t.typeCrucial}</option>
+                        <option value="start">{t.typeStart}</option>
+                        <option value="milestone">{t.typeMile}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">{t.evtUrl}</label>
+                    <input type="text" value={editForm.url} onChange={e => setEditForm({...editForm, url: e.target.value})} className="w-full p-2 border border-[#d6c7ab] rounded bg-white text-sm outline-none focus:border-amber-500 font-mono" />
+                  </div>
+                </div>
+                <div className="flex justify-between mt-6 pt-4 border-t border-[#e5d5b7]">
+                  <button onClick={deleteEvent} className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors disabled:opacity-50" disabled={!activeDateInfo.event}>
+                    {t.btnDelete}
+                  </button>
+                  <div className="flex gap-2">
+                    <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm text-stone-600 hover:bg-stone-100 rounded transition-colors">{t.btnCancel}</button>
+                    <button onClick={saveEvent} className="px-6 py-2 text-sm bg-amber-700 hover:bg-amber-800 text-white rounded font-bold shadow transition-colors">{t.btnSave}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* === 模态框：扩展与删除时间轴范围 === */}
+          {isExtendOpen && (
+            <div className="absolute right-12 top-20 w-[340px] bg-white p-5 rounded-lg shadow-2xl z-50 border max-h-[85vh] overflow-y-auto" style={{ borderColor: theme.borderMain }}>
+              <div className="flex justify-between items-center mb-4 pb-2 border-b" style={{ borderColor: theme.borderMain }}>
+                <h3 className="font-bold text-lg text-stone-800">{t.extendTitle}</h3>
+                <button onClick={() => setIsExtendOpen(false)} className="text-gray-400 hover:text-red-500 font-bold">✕</button>
+              </div>
+              <div className="text-xs text-stone-600 mb-4 bg-stone-50 p-2.5 rounded border flex flex-col gap-1" style={{ borderColor: theme.borderMain }}>
+                <span><strong>{t.startPoint}：</strong>{formatYearStr(startYear)}</span>
+                <span><strong>{t.endPoint}：</strong>{formatYearStr(endYear)}</span>
+              </div>
+              <div className="space-y-5">
+                <div className="p-3 border rounded bg-amber-50/30" style={{ borderColor: theme.borderMain }}>
+                  <label className="block text-sm font-bold mb-3" style={{ color: theme.startText }}>{t.extendPast}</label>
+                  <div className="mb-3">
+                    <div className="text-[10px] text-stone-500 mb-1">{t.extAddPast}</div>
+                    <div className="flex gap-1.5 mb-1.5">
+                      <button onClick={() => handleExtendPast(1)} className="flex-1 py-1 rounded border text-xs bg-white hover:bg-stone-50">+1 {t.yearLabel}</button>
+                      <button onClick={() => handleExtendPast(10)} className="flex-1 py-1 rounded border text-xs bg-white hover:bg-stone-50">+10 {t.yearLabel}</button>
+                    </div>
+                  </div>
+                  <div className="mb-3 pt-3 border-t border-dashed" style={{ borderColor: theme.borderMain }}>
+                    <div className="text-[10px] text-red-500 mb-1 font-bold">{t.extDelPast}</div>
+                    <div className="flex gap-1.5 mb-1.5">
+                      <button onClick={() => handleShrinkPast(1)} className="flex-1 py-1 rounded border text-xs text-red-600 border-red-200 bg-red-50 hover:bg-red-100">-1 {t.yearLabel}</button>
+                      <button onClick={() => handleShrinkPast(10)} className="flex-1 py-1 rounded border text-xs text-red-600 border-red-200 bg-red-50 hover:bg-red-100">-10 {t.yearLabel}</button>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 pt-2 border-t" style={{ borderColor: theme.borderMain }}>
+                    <input type="number" min="1" value={customPastYears} onChange={e => setCustomPastYears(Math.abs(Number(e.target.value)))} className="w-16 px-2 py-1 border rounded text-xs outline-none" style={{ borderColor: theme.borderMain }} />
+                    <button onClick={() => handleExtendPast(customPastYears)} className="flex-1 py-1 rounded border text-xs bg-white font-medium text-stone-700">{t.btnExtend}</button>
+                    <button onClick={() => handleShrinkPast(customPastYears)} className="flex-1 py-1 rounded border border-red-300 bg-red-50 text-xs text-red-600 font-medium">{t.btnShrink}</button>
+                  </div>
+                </div>
+
+                <div className="p-3 border rounded bg-blue-50/30" style={{ borderColor: theme.borderMain }}>
+                  <label className="block text-sm font-bold mb-3" style={{ color: theme.mileText }}>{t.extendFuture}</label>
+                  <div className="mb-3">
+                    <div className="text-[10px] text-stone-500 mb-1">{t.extAddFuture}</div>
+                    <div className="flex gap-1.5 mb-1.5">
+                      <button onClick={() => handleExtendFuture(1)} className="flex-1 py-1 rounded border text-xs bg-white hover:bg-stone-50">+1 {t.yearLabel}</button>
+                      <button onClick={() => handleExtendFuture(10)} className="flex-1 py-1 rounded border text-xs bg-white hover:bg-stone-50">+10 {t.yearLabel}</button>
+                    </div>
+                  </div>
+                  <div className="mb-3 pt-3 border-t border-dashed" style={{ borderColor: theme.borderMain }}>
+                    <div className="text-[10px] text-red-500 mb-1 font-bold">{t.extDelFuture}</div>
+                    <div className="flex gap-1.5 mb-1.5">
+                      <button onClick={() => handleShrinkFuture(1)} className="flex-1 py-1 rounded border text-xs text-red-600 border-red-200 bg-red-50 hover:bg-red-100">-1 {t.yearLabel}</button>
+                      <button onClick={() => handleShrinkFuture(10)} className="flex-1 py-1 rounded border text-xs text-red-600 border-red-200 bg-red-50 hover:bg-red-100">-10 {t.yearLabel}</button>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 pt-2 border-t" style={{ borderColor: theme.borderMain }}>
+                    <input type="number" min="1" value={customFutureYears} onChange={e => setCustomFutureYears(Math.abs(Number(e.target.value)))} className="w-16 px-2 py-1 border rounded text-xs outline-none" style={{ borderColor: theme.borderMain }} />
+                    <button onClick={() => handleExtendFuture(customFutureYears)} className="flex-1 py-1 rounded border text-xs bg-white font-medium text-stone-700">{t.btnExtend}</button>
+                    <button onClick={() => handleShrinkFuture(customFutureYears)} className="flex-1 py-1 rounded border border-red-300 bg-red-50 text-xs text-red-600 font-medium">{t.btnShrink}</button>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 pt-4 border-t flex justify-center" style={{ borderColor: theme.borderMain }}>
+                <button onClick={handleResetTimeline} className="text-[11px] text-stone-500 hover:text-red-600 transition-colors">{t.resetDefault}</button>
+              </div>
+            </div>
+          )}
+
+          {/* === 模态框：带有透明度通道与边框粗细的颜色设置 === */}
+          {isSettingsOpen && (
+            <div className="absolute right-4 top-20 w-96 bg-white p-5 rounded-lg shadow-2xl z-50 border max-h-[80vh] overflow-y-auto" style={{ borderColor: theme.borderMain }}>
+              <div className="flex justify-between items-center mb-4 pb-2 border-b" style={{ borderColor: theme.borderMain }}>
+                <h3 className="font-bold text-lg" style={{ color: theme.textMain }}>{t.colorTitle}</h3>
+                <button onClick={() => setIsSettingsOpen(false)} className="text-gray-400 hover:text-red-500 font-bold">✕</button>
+              </div>
+              
+              {/* 边框粗细设置 */}
+              <div className="mb-4 flex flex-col text-sm border-b border-gray-100 pb-3">
+                <label className="font-bold opacity-80 mb-2">{t.borderWidth}</label>
+                <div className="flex items-center gap-3">
+                   <input type="range" min="0" max="10" value={themeBorderWidth} onChange={(e) => setThemeBorderWidth(parseInt(e.target.value))} className="flex-1 accent-amber-600 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+                   <span className="text-xs font-mono text-gray-500 w-8">{themeBorderWidth}px</span>
+                </div>
+              </div>
+
+              {/* 背景图片设置 */}
+              <div className="mb-4 flex flex-col text-sm border-b border-gray-100 pb-3">
+                <label className="font-bold opacity-80 mb-2">{t.bgImage}</label>
+                <div className="flex gap-2">
+                   <input type="text" value={themeBgImage} onChange={(e) => setThemeBgImage(e.target.value)} placeholder="https://..." className="flex-1 border p-1.5 text-xs outline-none focus:border-amber-500 rounded" style={{ borderColor: theme.borderMain }} />
+                   <button onClick={() => setThemeBgImage("")} className="text-xs px-2 border rounded hover:bg-gray-100" style={{ borderColor: theme.borderMain }}>Clear</button>
+                </div>
+              </div>
+
+              {/* 颜色与透明度设置 */}
+              <div className="space-y-3">
+                {Object.entries({bgApp: "App BG", bgHeader: "Header BG", bgCard: "Card BG", borderMain: "Border", textMain: "Text", crucialBg: "Crucial BG", startBg: "Start BG", noteBg: "Note BG"}).map(([key, label]) => (
+                  <div key={key} className="flex flex-col text-sm border-b border-gray-50 pb-2">
+                    <label className="font-bold opacity-80 mb-1">{label} / {key}</label>
+                    <div className="flex items-center gap-3">
+                      <input type="color" value={themeHex[key]} onChange={(e) => setThemeHex(prev => ({ ...prev, [key]: e.target.value }))} className="w-8 h-8 p-0 border-0 rounded cursor-pointer" />
+                      <span className="text-[10px] font-mono text-gray-500 w-14">{themeHex[key]}</span>
+                      
+                      {/* 透明度滑块 */}
+                      <div className="flex items-center flex-1 gap-1">
+                         <span className="text-[10px] text-gray-400">{t.opacity}</span>
+                         <input type="range" min="0" max="100" value={themeAlpha[key]} onChange={(e) => setThemeAlpha(prev => ({ ...prev, [key]: parseInt(e.target.value) }))} className="flex-1 accent-amber-600 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+                         <span className="text-[10px] w-6 text-right font-mono text-gray-500">{themeAlpha[key]}%</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 pt-4 border-t" style={{ borderColor: theme.borderMain }}>
+                <button onClick={() => {setThemeHex(initialTheme); setThemeAlpha(initialAlpha); setThemeBorderWidth(1); setThemeBgImage("");}} className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded font-medium text-sm transition-colors">{t.resetColors}</button>
+              </div>
+            </div>
+          )}
+
+          {/* === 顶部控制台 (按截图 1:1 重构版) === */}
+          <div className="p-4 shadow-sm z-20 shrink-0 relative overflow-visible transition-colors duration-300" style={{ backgroundColor: theme.bgHeader, borderColor: theme.borderMain, borderBottomWidth: bWidth }}>
+            <div className="max-w-[120rem] min-w-[1440px] xl:min-w-[1680px] mx-auto flex flex-col gap-3 relative z-10 w-full px-4">
+              
+              {/* 第 1 行：大标题 & 资料链接 */}
+              <div className="flex w-full items-end gap-4">
+                <h1 className="text-xl md:text-3xl font-bold font-serif tracking-wide flex items-center gap-2 shrink-0" style={{ color: theme.startText }}>
+                  <span className="text-2xl md:text-3xl">📜</span> {t.appTitle}
+                </h1>
+                <div className="flex items-center gap-3 pb-1">
+                  <a href="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y" target="_blank" rel="noopener noreferrer" className="text-[13px] md:text-[14px] font-bold text-blue-700 hover:text-blue-900 transition-colors drop-shadow-sm">
+                    {t.courseLinkForeign}
+                  </a>
+                  <a href="https://www.123pan.cn/s/4l49-9Mt0h.html" target="_blank" rel="noopener noreferrer" className="text-[13px] md:text-[14px] font-bold text-red-600 hover:text-red-800 transition-colors drop-shadow-sm">
+                    {t.courseLinkDomestic}
+                  </a>
+                </div>
+              </div>
+
+              {/* 第 2 行：工具栏主行 (左右两端对齐) */}
+              <div className="flex justify-between items-center w-full">
+                
+                {/* 左半部分：视图切换、跨度、提示块 */}
+                <div className="flex items-center gap-2">
+                  
+                  {/* 视图切换按钮 */}
+                  <div className="flex bg-white rounded shadow-sm overflow-hidden" style={{ border: '1px solid #d1d5db' }}>
+                    {[{ id: 'year', label: t.viewYear }, { id: 'month', label: t.viewMonth }, { id: 'day', label: t.viewDay }].map((v, i) => (
+                      <button key={v.id} onClick={() => { setViewMode(v.id); jumpToYear(inputYear); }} 
+                        className={`px-4 py-1.5 text-sm md:text-base font-bold transition-colors ${i !== 0 ? 'border-l border-gray-300' : ''} ${viewMode === v.id ? '' : 'hover:bg-gray-50'}`}
+                        style={{ backgroundColor: viewMode === v.id ? '#b45309' : 'transparent', color: viewMode === v.id ? '#ffffff' : theme.textMain }}>
+                        {v.label}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  {/* 跨度切换按钮 (仅在年视图显示) */}
+                  {viewMode === 'year' && (
+                    <div className="flex bg-white rounded shadow-sm overflow-hidden items-center ml-2" style={{ border: '1px solid #d1d5db' }}>
+                      <span className="text-xs px-3 py-1.5 font-medium bg-[#f3f4f6] text-gray-600 border-r border-gray-300">{t.span}</span>
+                      {[1, 5, 10, 50, 100, 500].map((grp, i) => (
+                        <button key={grp} onClick={() => setYearGroup(grp)} 
+                          className={`px-3 py-1.5 text-xs md:text-sm font-bold transition-colors ${i !== 0 ? 'border-l border-gray-300' : ''} ${yearGroup === grp ? '' : 'hover:bg-gray-50'}`}
+                          style={{ backgroundColor: yearGroup === grp ? '#e0f2fe' : 'transparent', color: yearGroup === grp ? '#0369a1' : theme.textSub }}>
+                          {grp}{t.yearLabel}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 操作提示块：已按照要求在年视图(year)中完全隐藏 */}
+                  {viewMode === 'month' && (
+                    <span className="text-xs md:text-sm ml-2 font-bold bg-[#fef3c7] px-3 py-1.5 rounded shadow-sm" style={{ color: '#92400e', border: '1px solid #fde68a' }}>
+                      {t.clickToDrill}
+                    </span>
+                  )}
+                  {viewMode === 'day' && (
+                    <span className="text-xs md:text-sm ml-2 font-bold bg-[#fef3c7] px-3 py-1.5 rounded shadow-sm" style={{ color: '#92400e', border: '1px solid #fde68a' }}>
+                      {t.clickToEdit}
+                    </span>
+                  )}
+                </div>
+
+                {/* 右半部分：快捷穿梭、跳转、语言、控制按钮 */}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm mr-1 font-serif text-gray-500">{t.quickNav}</span>
+                  {[{ y: startYear, l: t.startPoint }, { y: 31, l: t.crucify }, { y: 1844, l: t.end1844 }, { y: endYear, l: t.endPoint }].map((btn, i) => (
+                    <button key={i} onClick={() => jumpToYear(btn.y)} className="px-3 py-1.5 text-sm rounded font-medium border border-gray-300 shadow-sm transition-opacity hover:bg-gray-50 bg-white" style={{ color: theme.textMain }}>
+                      {btn.l}
+                    </button>
+                  ))}
+
+                  <form onSubmit={handleManualInput} className="flex ml-1 shadow-sm rounded overflow-hidden border border-gray-300">
+                    <input type="number" value={inputYear} onChange={(e) => setInputYear(e.target.value)} className="w-20 px-2 py-1.5 text-sm md:text-base focus:outline-none text-center font-mono bg-white" style={{ color: theme.textMain }} placeholder={t.placeholderYear} />
+                    <button type="submit" className="px-3 py-1.5 text-sm font-medium text-white border-l border-[#b45309]" style={{ backgroundColor: '#b45309' }}>
+                      {t.flip}
+                    </button>
+                  </form>
+                  
+                  {/* 多语言选择下拉框 */}
+                  <div className="ml-1 px-3 py-1.5 border border-gray-300 shadow-sm rounded flex items-center bg-white/90 backdrop-blur-sm">
+                     <span className="text-sm mr-2 text-blue-500">🌐 🔄</span>
+                     <span className="text-xs mr-2 text-gray-500">简|繁|EN|ES|FR|RU|あ|가➡</span>
+                     <select value={lang} onChange={(e) => setLang(e.target.value)} className="text-sm outline-none bg-transparent cursor-pointer font-bold" style={{ color: theme.textMain }}>
+                        <option value="zh">简体中文</option>
+                        <option value="zh-TW">繁體中文</option>
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="ru">Русский</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                     </select>
+                  </div>
+
+                  <button onClick={() => {setIsExtendOpen(!isExtendOpen); setIsSettingsOpen(false);}} className="p-1.5 rounded hover:bg-black/5 ml-1" title={t.extendTitle}>
+                    <span className="text-xl">⏳</span>
+                  </button>
+
+                  <button onClick={() => {setIsSettingsOpen(!isSettingsOpen); setIsExtendOpen(false);}} className="p-1.5 rounded hover:bg-black/5" title={t.colorTitle}>
+                    <span className="text-xl">🎨</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 第 3 行：制作者注 (无边框，纯文本对齐) */}
+              <div className="w-full text-left text-[13px] md:text-[14px] font-serif tracking-wide pt-1" style={{ color: theme.textSub }}>
+                {t.noteJewishCalendar}
+              </div>
+
+            </div>
+          </div>
+
+          {/* === 虚拟滚动大图表容器 === */}
+          <div ref={containerRef} onScroll={handleScroll} className="flex-1 overflow-auto scroll-smooth custom-scrollbar w-full" style={{ willChange: 'transform' }}>
+            <div className="max-w-[120rem] min-w-[1440px] xl:min-w-[1680px] mx-auto relative shadow-inner transition-colors duration-300 border-x" style={{ height: `${totalHeight}px`, borderColor: theme.borderMain, borderWidth: bWidth, backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              
+              {visibleData.map((item) => (
+                <div key={item.absoluteIndex} className={`absolute w-full flex items-stretch transition-colors hover:bg-black/10`} style={{ height: `${rowHeight}px`, top: `${item.absoluteIndex * rowHeight}px`, borderColor: theme.borderMain, borderBottomWidth: bWidth, borderTopWidth: item.isFirstOfMonth ? bWidth : 0, borderTopColor: theme.startText, borderStyle: 'solid', backgroundColor: item.hasEvent || item.monthHasEvent ? theme.bgHeader : 'transparent' }}>
+                  
+                  {/* 左侧：年份、中国朝代与预言标记 */}
+                  <div className="w-28 shrink-0 p-4 flex flex-col justify-start overflow-hidden" style={{ borderColor: theme.borderMain, borderRightWidth: bWidth, borderStyle: 'solid' }}>
+                    <div className="sticky top-4">
+                      <span className="font-extrabold text-xl tracking-tight font-serif" style={{ color: theme.startText }}>
+                        {viewMode === 'year' ? item.startYearStr : item.yearStr}
+                      </span>
+                      {viewMode === 'year' && item.startYear !== item.endYear && (
+                        <div className="text-[10px] font-bold mt-0.5 opacity-80" style={{ color: theme.startText }}>~ {item.endYearStr}</div>
+                      )}
+                      
+                      {viewMode !== 'year' && (
+                        <>
+                          <div className="text-[10px] mt-1 font-mono" style={{ color: theme.textSub }}>{t.jewishEra}</div>
+                          <div className="text-xs font-bold font-mono" style={{ color: theme.textMain }}>{item.jewishYearDisplay}</div>
+                          <div className="text-[10px] mt-2 font-mono" style={{ color: theme.textSub }}>{t.chineseDynasty}</div>
+                          <div className="text-[11px] font-bold font-serif" style={{ color: theme.mileText }}>{getDynasty(item.year)}</div>
+                          
+                          {/* 针对日视图的左侧栏标记 */}
+                          {viewMode === 'day' && getProphecyTags(getProphecyN(item.year, item.r)).length > 0 && (
+                            <div className="mt-3 flex flex-col gap-1">
+                              <div className="text-[10px] font-mono" style={{ color: theme.textSub }}>{t.prophecyProgress}</div>
+                              {getProphecyTags(getProphecyN(item.year, item.r)).map((tag, idx) => (
+                                <div key={idx} className="text-[9px] font-bold px-1 py-0.5 rounded bg-amber-500/10 text-amber-900 border border-amber-500/30 w-max shadow-sm tracking-tighter max-w-full">
+                                  {tag}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      {viewMode === 'year' && (
+                        <>
+                          <div className="text-[10px] mt-2 font-mono" style={{ color: theme.textSub }}>{t.dynastySpan}</div>
+                          <div className="text-[11px] font-bold font-serif leading-snug" style={{ color: theme.mileText }}>
+                             {getDynasty(item.startYear)} 
+                             {item.startYear !== item.endYear && getDynasty(item.startYear) !== getDynasty(item.endYear) ? ` ~ ${getDynasty(item.endYear)}` : ''}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 次左侧：额外信息 (依据视图变化) */}
+                  {viewMode === 'day' && (
+                    <div className="w-32 shrink-0 p-4 flex flex-col justify-center" style={{ borderColor: theme.borderMain, backgroundColor: theme.bgCard, borderRightWidth: bWidth, borderStyle: 'solid' }}>
+                      <div className="flex flex-col gap-1 mb-2">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded text-center" style={{ backgroundColor: theme.mileBg, color: theme.mileText, borderColor: theme.mileBorder, borderWidth: bWidth, borderStyle: 'solid' }}>{t.relMonth}:{item.r}{t.monthLabel}</span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded text-center" style={{ backgroundColor: 'rgba(16,185,129,0.1)', color: '#065f46', borderColor: 'rgba(16,185,129,0.3)', borderWidth: bWidth, borderStyle: 'solid' }}>{t.civMonth}:{item.c}{t.monthLabel}</span>
+                      </div>
+                      <div className="font-bold leading-tight font-serif text-center" style={{ color: theme.textMain }}>{t.months[item.nameIndex]}</div>
+                      {item.isLeap && <span className="mt-1 text-[10px] px-1.5 py-0.5 rounded text-center" style={{ backgroundColor: theme.crucialBg, color: theme.crucialText, borderColor: theme.crucialBorder, borderWidth: bWidth, borderStyle: 'solid' }}>{t.leap}</span>}
+                    </div>
+                  )}
+                  {viewMode === 'month' && (
+                    <div className="w-28 shrink-0 p-4 pt-6 flex flex-col justify-start" style={{ borderColor: theme.borderMain, backgroundColor: theme.bgCard, borderRightWidth: bWidth, borderStyle: 'solid' }}>
+                      <div className="font-bold leading-tight font-serif" style={{ color: theme.textMain }}>{t.monthOverview}</div>
+                      <div className="text-[10px] mt-2 opacity-80" style={{ color: theme.textSub }}>{t.monthCount.replace('{n}', item.monthsData.length)}</div>
+                    </div>
+                  )}
+                  {viewMode === 'year' && (
+                    <div className="w-28 shrink-0 p-4 pt-6 flex flex-col justify-start" style={{ borderColor: theme.borderMain, backgroundColor: theme.bgCard, borderRightWidth: bWidth, borderStyle: 'solid' }}>
+                      <div className="font-bold leading-tight font-serif" style={{ color: theme.textMain }}>{t.stageOverview}</div>
+                      <div className="text-[10px] mt-2 opacity-80" style={{ color: theme.textSub }}>{t.stageCount.replace('{n}', item.chunksData.length)}</div>
+                    </div>
+                  )}
+
+                  {/* 中央图表区 */}
+                  <div className="flex-1 p-3 flex flex-col justify-start relative">
+                    
+                    {viewMode === 'day' && (
+                      <div className="flex flex-wrap gap-2 md:gap-2.5 mt-2">
+                        {item.daysData.map((dInfo) => {
+                          const event = dInfo.event;
+                          const specificStyle = getEventStyle(event);
+                          
+                          return (
+                            <div key={dInfo.day} onClick={() => openEditor(dInfo)} className="relative group w-11 h-16 md:w-12 md:h-[4.5rem] flex flex-col items-center justify-center rounded shadow-sm transition-all duration-200 cursor-pointer hover:bg-white hover:scale-110 hover:shadow-lg hover:z-20" style={{ ...specificStyle, borderStyle: 'solid' }}>
+                              <span className="leading-none mb-0.5 font-bold opacity-80" style={{ fontSize: '11px', color: event ? specificStyle.color : theme.textSub }}>{t.weekPre}{t.weekdays[dInfo.dowIdx]}</span>
+                              <span className="text-base font-bold leading-none mt-0.5" style={{ color: event ? specificStyle.color : theme.textMain }}>{dInfo.day}</span>
+                              <span className="font-mono leading-none mt-1 tracking-tighter" style={{ fontSize: '11px', color: event ? specificStyle.color : theme.textSub }}>{dInfo.gregMonth}/{dInfo.gregDay}</span>
+
+                              {event && (
+                                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-3 rounded-md shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 border backdrop-blur-sm" style={{ backgroundColor: theme.bgApp, borderColor: theme.borderMain }}>
+                                  <div className="text-[10px] mb-1.5 border-b pb-1.5 flex justify-between font-serif" style={{ color: theme.textSub, borderColor: theme.borderMain }}>
+                                    <span>{t.jewishEra}: {t.relMonth}{item.r}{t.monthLabel} {t.civMonth}{dInfo.day}</span>
+                                    <span className="font-mono" style={{ color: specificStyle.color }}>Gregorian: {dInfo.gregMonth}/{dInfo.gregDay}</span>
+                                  </div>
+                                  <div className="text-sm font-bold mb-1 font-serif" style={{ color: specificStyle.color }}>{event.title}</div>
+                                  <div className="text-[11px] leading-relaxed mb-2" style={{ color: theme.textMain }}>{event.desc}</div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {viewMode === 'month' && (
+                      <div className="grid grid-cols-4 md:grid-cols-7 gap-2 w-full mt-2">
+                        {item.monthsData.map((m) => {
+                          const specificStyle = getHighestStyle(m.events);
+                          const hasEv = m.events.length > 0;
+                          
+                          // 月视图：在每个月块里写入神圣推演标记
+                          const pTags = getProphecyTags(getProphecyN(item.year, m.r));
+
+                          return (
+                            <div key={m.r} onClick={() => handleZoomToYear(item.year)} className="relative group min-h-[9rem] py-3 px-1 flex flex-col items-center justify-between rounded shadow-sm cursor-pointer transition-all hover:scale-105 hover:z-20 hover:bg-white" style={{ ...specificStyle, borderWidth: hasEv ? (themeBorderWidth*2)+'px' : bWidth, borderStyle: 'solid', opacity: hasEv ? 1 : 0.7 }}>
+                               <div className="flex flex-col items-center w-full">
+                                 {/* 月份标题字体放大 */}
+                                 <span className="text-base font-bold font-serif text-center" style={{ color: hasEv ? specificStyle.color : theme.textMain }}>{t.months[m.nameIndex]}</span>
+                                 <span className="text-xs font-mono mt-1 opacity-80" style={{ color: hasEv ? specificStyle.color : theme.textSub }}>{t.relMonth}:{m.r}{t.monthLabel} {t.civMonth}:{m.c}{t.monthLabel}</span>
+                               </div>
+                               
+                               {/* 月视图中的预言进度 - 字体大幅加强 */}
+                               {pTags.length > 0 && (
+                                 <div className="flex flex-col items-center mt-auto pt-3 w-full gap-[2px]">
+                                   {pTags.map((tag, tIdx) => (
+                                     <span key={tIdx} className="text-[13px] md:text-[15px] whitespace-nowrap opacity-100 leading-tight font-mono font-bold tracking-tight" style={{ color: theme.startText }}>
+                                       {tag}
+                                     </span>
+                                   ))}
+                                 </div>
+                               )}
+                               
+                               {hasEv && (
+                                 <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 p-3 rounded-md shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 border backdrop-blur-sm hidden group-hover:block" style={{ backgroundColor: theme.bgApp, borderColor: theme.borderMain }}>
+                                    <div className="text-xs font-bold mb-1 font-serif" style={{ color: specificStyle.color }}>{item.yearStr} {t.months[m.nameIndex]}</div>
+                                    {m.events.slice(0, 4).map((ev, i) => <div className="text-[10px] leading-tight mb-1" style={{ color: theme.textMain }}>• {ev.title}</div>)}
+                                    {m.events.length > 4 && <div className="text-[9px] italic" style={{ color: theme.textSub }}>{t.etcRecords.replace('{n}', m.events.length)}</div>}
+                                 </div>
+                               )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+
+                    {viewMode === 'year' && (
+                      <div className="flex items-start justify-center gap-1 md:gap-2 h-full w-full py-4 px-2 mt-2">
+                        {item.chunksData.map((chunk, cIdx) => {
+                          const specificStyle = getHighestStyle(chunk.events);
+                          const hasEv = chunk.events.length > 0;
+                          
+                          let yearLabel = "";
+                          if (chunk.startYear === chunk.endYear) {
+                             yearLabel = Math.abs(chunk.startYear) + (chunk.startYear < 0 ? "BC" : "");
+                          } else {
+                             const sY = Math.abs(chunk.startYear);
+                             const eY = Math.abs(chunk.endYear);
+                             const sEra = chunk.startYear < 0 ? "BC" : "";
+                             const eEra = chunk.endYear < 0 ? "BC" : "";
+                             yearLabel = sEra === eEra ? `${sY}-${eY}${sEra}` : `${sY}BC-${eY}AD`;
+                          }
+
+                          // 年视图的标记渲染在春季对应的年份
+                          let nForYearCircle = getProphecyN(chunk.startYear, 1);
+                          const pTags = nForYearCircle > 0 ? getProphecyTags(nForYearCircle) : [];
+
+                          return (
+                            <div key={cIdx} className="flex-1 flex flex-col items-center justify-start group min-w-[120px] px-1">
+                                <div onClick={() => handleZoomToYear(chunk.startYear)} className={`w-full ${yearGroup === 1 ? 'w-10 h-10 md:w-12 md:h-12' : 'h-8 md:h-10'} rounded-full shadow-sm relative cursor-pointer transition-all hover:scale-110 hover:z-20 flex items-center justify-center overflow-visible`} style={{ ...specificStyle, borderWidth: hasEv ? (themeBorderWidth*2)+'px' : bWidth, borderStyle: 'solid', opacity: hasEv ? 1 : 0.5 }}>
+                                   <span className="text-[10px] sm:text-xs font-bold whitespace-nowrap px-1 truncate select-none" style={{ color: hasEv ? specificStyle.color : theme.textSub }}>{yearLabel}</span>
+                                   
+                                   {hasEv && (
+                                     <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-3 rounded-md shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 border backdrop-blur-sm hidden group-hover:block" style={{ backgroundColor: theme.bgApp, borderColor: theme.borderMain }}>
+                                        <div className="text-xs font-bold mb-1 font-serif" style={{ color: specificStyle.color }}>{chunk.startYearStr} {chunk.startYear !== chunk.endYear ? `~ ${chunk.endYearStr}` : ''}</div>
+                                        {chunk.events.slice(0, 5).map((ev, i) => <div className="text-[10px] leading-tight mb-1" style={{ color: theme.textMain }}>• {ev.title}</div>)}
+                                        {chunk.events.length > 5 && <div className="text-[9px] italic" style={{ color: theme.textSub }}>{t.etcRecords.replace('{n}', chunk.events.length)}</div>}
+                                     </div>
+                                   )}
+                                </div>
+                                
+                                {/* 渲染在圆圈/横杠下方的专属推演标签 - 已放大字体并限制间距 */}
+                                {pTags.length > 0 && (
+                                  <div className="flex flex-col items-center mt-3 w-full gap-[2px]">
+                                    {pTags.map((tag, tIdx) => (
+                                      <span key={tIdx} className="text-[13px] md:text-[15px] whitespace-nowrap opacity-100 leading-tight font-mono font-bold tracking-tight" style={{ color: theme.startText }}>
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+
+                  </div>
+
+                  {/* 侧边栏：提取当行所有事件摘要，修改为顶部对齐以防止错位 */}
+                  <div className="w-64 shrink-0 p-4 pt-6 flex flex-col justify-start overflow-hidden" style={{ borderColor: theme.borderMain, backgroundColor: theme.bgCard, borderLeftWidth: bWidth, borderStyle: 'solid' }}>
+                    {viewMode === 'day' && item.monthHasEvent && (
+                      <div className="space-y-4">
+                        {item.daysData.filter(d => d.event).map((evtData, idx) => {
+                          const evtStyle = getEventStyle(evtData.event);
+                          return (
+                            <div key={idx} className="pl-2.5 relative group" style={{ borderLeftColor: evtStyle.borderColor, borderLeftWidth: Math.max(2, themeBorderWidth)+'px', borderStyle: 'solid' }}>
+                              <button onClick={() => openEditor(evtData)} className="absolute -left-6 top-0 opacity-0 group-hover:opacity-100 text-xs bg-white border rounded px-1 shadow-sm text-stone-500 hover:text-amber-600 transition-opacity" style={{ borderWidth: bWidth }}>✏️</button>
+                              <div className="flex items-baseline gap-1.5 mb-1">
+                                <span className="text-[10px] px-1 rounded shadow-sm font-mono" style={{ backgroundColor: theme.bgApp, color: theme.textSub, borderColor: theme.borderMain, borderWidth: bWidth, borderStyle: 'solid' }}>{evtData.gregMonth}/{evtData.gregDay}({t.weekdays[evtData.dowIdx]})</span>
+                                <span className="text-xs font-bold font-serif" style={{ color: evtStyle.color }}>{evtData.event.title}</span>
+                              </div>
+                              <div className="text-[10px] line-clamp-2 leading-tight mb-1.5" title={evtData.event.desc} style={{ color: theme.textSub }}>{evtData.event.desc}</div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                    
+                    {viewMode === 'month' && renderSidebarEvents(item.allEvents)}
+                    {viewMode === 'year' && renderSidebarEvents(item.allEvents)}
+                    {((viewMode === 'day' && !item.monthHasEvent) || (viewMode === 'month' && !item.hasEvent) || (viewMode === 'year' && !item.hasEvent)) && (
+                       <div className="text-[10px] text-left italic font-serif" style={{ color: theme.textSub, opacity: 0.6 }}>{t.noRecord}</div>
+                    )}
+                  </div>
+
+                </div>
+              ))}
+            </div>
+          </div>
+          </div>
+          
+          <style dangerouslySetInnerHTML={{__html: `
+            .custom-scrollbar::-webkit-scrollbar { height: 10px; width: 8px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: ${theme.bgApp}; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: ${theme.borderMain}; border-radius: 4px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { filter: brightness(0.9); }
+          `}} />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<JewishHistoricalEngine />);
+  </script>
+</body>
+</html>
