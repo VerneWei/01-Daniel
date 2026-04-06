@@ -1,10 +1,12 @@
-# 但以理书预言图解-最新版 4.3 版
-# (The Illustration of the prophecy of Daniel)
+# 但以理书预言图解-最新版 4.5 版
+# (The Chart of the prophecy of Daniel)
 
-> ## 请下载最新版本2025.1.15,但以理书预言图解-4.3版，**简体**
-> <a href="https://raw.githubusercontent.com/VerneWei/01-Daniel/refs/heads/main/4.3%E7%94%B5%E5%AD%90%E5%85%8D%E8%B4%B9%E7%89%88-%E4%BD%86%E4%BB%A5%E7%90%86%E5%9B%BE%E8%A7%A3-%E7%AE%80%E4%BD%93-2025%E5%B9%B41%E6%9C%8815%E6%97%A5.jpg">点此下载-(简体)，4.3版，但以理书预言图解.pdf</a> <br>
+> ## 请下载最新版本2025.1.23,但以理书预言图解-4.5版，**简体**
+> <a href="https://github.com/VerneWei/01-Daniel/blob/main/4.5-%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3%20-%20%E7%AE%80%E4%BD%93%E7%89%88%20-%20%E7%94%B5%E5%AD%90%E7%89%88%EF%BC%8C2025-1-23.jpg">点此下载-(简体)，4.3版，但以理书预言图解.pdf</a> <br>
 <br>
 
+> ### <a href="https://github.com/VerneWei/01-Daniel/raw/refs/heads/main/2300%E6%97%A5%E6%9F%A5%E8%AF%A2%20-%20%E7%A6%BB%E7%BA%BF%E5%B7%A5%E5%85%B7%20-%20L.zip"> 点此下载2300日查询工具</a> <br>
+> 
 >完成但以理的系列课程，以下是有YouTube视频列表链接 <br>
 
 > ### <a href="https://www.youtube.com/watch?v=5CZJmdGottg&list=PLYL1obvmroFF6C9Vk7H5hV8TRshAS7z9y">点此浏览但以理的系列课程【共15讲】</a><br>
@@ -27,7 +29,7 @@
 > ### 但以理·课程图解 + 视频  + 音频，+  PPT，下载地址<br>
 > ### <a href="https://www.123pan.com/s/4l49-9Mt0h.html">点此浏览但以理图课程素材内容</a>
 
-![image](https://github.com/VerneWei/01-Daniel/blob/main/4.3-%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3%20-%20%E7%AE%80%E4%BD%93%E7%89%88%20-%20%E7%94%B5%E5%AD%90%E7%89%88%EF%BC%8C2025-1-16.jpg?raw=true) <br>
+![image](https://github.com/VerneWei/01-Daniel/blob/main/4.5-%E4%BD%86%E4%BB%A5%E7%90%86%E4%B9%A6%E9%A2%84%E8%A8%80%E5%9B%BE%E8%A7%A3%20-%20%E7%AE%80%E4%BD%93%E7%89%88%20-%20%E7%94%B5%E5%AD%90%E7%89%88%EF%BC%8C2025-1-23.jpg?raw=true) <br>
 
 > ## 4.3增加项：
 > #### 1、更换AI图片素材
